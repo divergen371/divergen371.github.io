@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on しろくまの雑記帳</title>
+    <link>https://divergen371.github.io/categories/</link>
+    <description>Recent content in Categories on しろくまの雑記帳</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Fri, 10 Jul 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://divergen371.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Cpaw</title>
+      <link>https://divergen371.github.io/categories/cpaw/</link>
+      <pubDate>Fri, 10 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/cpaw/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>CTF</title>
+      <link>https://divergen371.github.io/categories/ctf/</link>
+      <pubDate>Fri, 10 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/ctf/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hacking Lab</title>
+      <link>https://divergen371.github.io/categories/hacking-lab/</link>
+      <pubDate>Fri, 10 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/hacking-lab/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lab Environment</title>
+      <link>https://divergen371.github.io/categories/lab-environment/</link>
+      <pubDate>Fri, 10 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/lab-environment/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>portscanner</title>
+      <link>https://divergen371.github.io/categories/portscanner/</link>
+      <pubDate>Fri, 10 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/portscanner/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>tool</title>
+      <link>https://divergen371.github.io/categories/tool/</link>
+      <pubDate>Fri, 10 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/tool/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
