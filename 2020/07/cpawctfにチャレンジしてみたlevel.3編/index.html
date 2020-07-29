@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Hugo 0.74.2 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.4.8-BETA">
 <meta name="author" content="しろくま">
 <meta name="keywords" content="tech">
 <meta name="description" content="">
@@ -13,8 +13,8 @@
 
 <meta property="og:description" content="">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CpawCTFにチャレンジしてみた（Level.3編）">
-<meta name="twitter:title" content="CpawCTFにチャレンジしてみた（Level.3編）">
+<meta property="og:title" content="CpawCTFにチャレンジしてみた(Level.3編)">
+<meta name="twitter:title" content="CpawCTFにチャレンジしてみた(Level.3編)">
 <meta property="og:url" content="https://divergen371.github.io/2020/07/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/">
 <meta property="twitter:url" content="https://divergen371.github.io/2020/07/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/">
 <meta property="og:site_name" content="しろくまの雑記帳">
@@ -69,7 +69,7 @@
   <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
 
 
-    <title>CpawCTFにチャレンジしてみた（Level.3編）</title>
+    <title>CpawCTFにチャレンジしてみた(Level.3編)</title>
 
     <link rel="icon" href="https://divergen371.github.io/favicon.png">
     
@@ -92,6 +92,50 @@
       
     
     
+   <script type="text/javascript" id="MathJax-script" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   MathJax.Hub.Config({
+     showProcessingMessages: false,
+     messageStyle: "none",
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       processEscapes: true
+     },
+     TeX: {
+       MultLineWidth: "100%",
+       equationNumbers: { autoNumber: "AMS" }
+     },
+     "HTML-CSS": { fonts: ["Latin-Modern"] }
+   });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script type="text/x-matjax-config">
+  MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+    var TEX = MathJax.InputJax.TeX;
+    var PREFILTER = TEX.prefilterMath;
+    TEX.Augment({
+      prefilterMath: function (math,displaymode,script) {
+        if (!displaymode) {math = "\\small{"+math+"}"}
+        return PREFILTER.call(TEX,math,displaymode,script);
+      }
+    });
+  });
+</script>h
+
   </head>
 
   <body>
@@ -212,7 +256,7 @@
       <div class="post-header main-content-wrap text-left">
   
     <h1 class="post-title" itemprop="headline">
-      CpawCTFにチャレンジしてみた（Level.3編）
+      CpawCTFにチャレンジしてみた(Level.3編)
     </h1>
   
   
@@ -253,24 +297,221 @@
             <div class="main-content-wrap">
               <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
 <ul>
-<li><a href="#一問目-またやらかした-ジャンル-reversing">一問目 またやらかした！ ジャンル・Reversing</a>
+<li><a href="#一問目-またやらかした-ジャンル-reversing">一問目 またやらかした! ジャンル・Reversing</a>
 <ul>
 <li><a href="#問題">問題</a></li>
-<li><a href="#解法">解法</a></li>
+<li><a href="#解法">解法</a>
+<ul>
+<li><a href="#備忘録-暗号文をpythonのリストで扱うための準備">備忘録 - 暗号文をpythonのリストで扱うための準備</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#二問目-baby-s-sqli-stage2-ジャンル-web">二問目 Baby&rsquo;s SQLi -Stage2- ジャンル・Web</a>
+<ul>
+<li><a href="#問題-1">問題</a></li>
+<li><a href="#解法-1">解法</a></li>
+</ul></li>
+<li><a href="#三門目-remainder-theorem-ジャンル-ppc">三門目 Remainder theorem ジャンル・PPC</a>
+<ul>
+<li><a href="#問題-2">問題</a></li>
+<li><a href="#解法-2">解法</a></li>
 </ul></li>
 </ul>
 </nav>
 
-<h1 id="一問目-またやらかした-ジャンル-reversing">一問目 またやらかした！ ジャンル・Reversing</h1>
+<h1 id="一問目-またやらかした-ジャンル-reversing">一問目 またやらかした! ジャンル・Reversing</h1>
 
 <hr />
 
 <h2 id="問題">問題</h2>
 
-<p>またprintf（）をし忘れたプログラムが見つかった。<br />
+<p>またprintf()をし忘れたプログラムが見つかった。<br />
 とある暗号を解くプログラムらしい。</p>
 
 <h2 id="解法">解法</h2>
+
+<p>とりあえずfileコマンド</p>
+<pre><code>rev200: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV),  
+dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.24,  
+BuildID[sha1]=e87140105d6b5c8ea9b0193380ab3b79bfdcd85b, not stripped</code></pre>
+<p>stringsコマンド叩いても、これといった情報は出てこない。<br />
+objdumpで中身を覗きmain関数をチェックしようと思う。</p>
+<pre><code>080483ed &lt;main&gt;:
+ 80483ed:       55                      push   %ebp
+ 80483ee:       89 e5                   mov    %esp,%ebp
+ 80483f0:       57                      push   %edi
+ 80483f1:       53                      push   %ebx
+ 80483f2:       83 c4 80                add    $0xffffff80,%esp
+ 80483f5:       c7 45 88 7a 00 00 00    movl   $0x7a,-0x78(%ebp)
+ 80483fc:       c7 45 8c 69 00 00 00    movl   $0x69,-0x74(%ebp)
+ 8048403:       c7 45 90 78 00 00 00    movl   $0x78,-0x70(%ebp)
+ 804840a:       c7 45 94 6e 00 00 00    movl   $0x6e,-0x6c(%ebp)
+ 8048411:       c7 45 98 62 00 00 00    movl   $0x62,-0x68(%ebp)
+ 8048418:       c7 45 9c 6f 00 00 00    movl   $0x6f,-0x64(%ebp)
+ 804841f:       c7 45 a0 7c 00 00 00    movl   $0x7c,-0x60(%ebp)
+ 8048426:       c7 45 a4 6b 00 00 00    movl   $0x6b,-0x5c(%ebp)
+ 804842d:       c7 45 a8 77 00 00 00    movl   $0x77,-0x58(%ebp)
+ 8048434:       c7 45 ac 78 00 00 00    movl   $0x78,-0x54(%ebp)
+ 804843b:       c7 45 b0 74 00 00 00    movl   $0x74,-0x50(%ebp)
+ 8048442:       c7 45 b4 38 00 00 00    movl   $0x38,-0x4c(%ebp)
+ 8048449:       c7 45 b8 38 00 00 00    movl   $0x38,-0x48(%ebp)
+ 8048450:       c7 45 bc 64 00 00 00    movl   $0x64,-0x44(%ebp)
+ 8048457:       c7 45 84 19 00 00 00    movl   $0x19,-0x7c(%ebp)
+ 804845e:       8d 5d c0                lea    -0x40(%ebp),%ebx
+ 8048461:       b8 00 00 00 00          mov    $0x0,%eax
+ 8048466:       ba 0e 00 00 00          mov    $0xe,%edx
+ 804846b:       89 df                   mov    %ebx,%edi
+ 804846d:       89 d1                   mov    %edx,%ecx
+ 804846f:       f3 ab                   rep stos %eax,%es:(%edi)
+ 8048471:       c7 45 80 00 00 00 00    movl   $0x0,-0x80(%ebp)
+ 8048478:       eb 17                   jmp    8048491 &lt;main+0xa4&gt;
+ 804847a:       8b 45 80                mov    -0x80(%ebp),%eax
+ 804847d:       8b 44 85 88             mov    -0x78(%ebp,%eax,4),%eax
+ 8048481:       33 45 84                xor    -0x7c(%ebp),%eax
+ 8048484:       89 c2                   mov    %eax,%edx
+ 8048486:       8b 45 80                mov    -0x80(%ebp),%eax
+ 8048489:       89 54 85 c0             mov    %edx,-0x40(%ebp,%eax,4)
+ 804848d:       83 45 80 01             addl   $0x1,-0x80(%ebp)
+ 8048491:       83 7d 80 0d             cmpl   $0xd,-0x80(%ebp)
+ 8048495:       7e e3                   jle    804847a &lt;main+0x8d&gt;
+ 8048497:       b8 00 00 00 00          mov    $0x0,%eax
+ 804849c:       83 ec 80                sub    $0xffffff80,%esp
+ 804849f:       5b                      pop    %ebx
+ 80484a0:       5f                      pop    %edi
+ 80484a1:       5d                      pop    %ebp
+ 80484a2:       c3                      ret
+ 80484a3:       66 90                   xchg   %ax,%ax
+ 80484a5:       66 90                   xchg   %ax,%ax
+ 80484a7:       66 90                   xchg   %ax,%ax
+ 80484a9:       66 90                   xchg   %ax,%ax
+ 80484ab:       66 90                   xchg   %ax,%ax
+ 80484ad:       66 90                   xchg   %ax,%ax
+ 80484af:       90                      nop</code></pre>
+<ul>
+<li><code>80483f5</code>から<code>8048457</code>にかけてスタックに数値を格納している。<br /></li>
+<li>レジスタへの数値の代入・コピーを経て<code>8048478</code>のジャンプ命令で<code>8048491</code>に移動、<code>-0x80(%ebp)ebp</code>と数値<code>0xd(13)</code>を比較する。<br /></li>
+<li><code>8048495</code>のjle命令により<code>-0x80(%ebp)</code>が数値<code>0xd</code>より少ないか、等しい場合に<code>804847a</code>に移動する。</li>
+<li><code>8048481</code>でスタックに格納した数値と<code>-0x7c(%ebp)</code>のxorをとり、<code>-0x40(%ebp)</code>に格納する。</li>
+<li><code>-0x80(%ebp)</code>に1を加算して<code>8048491</code>比較する。</li>
+<li>以降、条件を満たすまでループ。
+<br /></li>
+</ul>
+
+<p>ASCIIコードの16進数に変換された文字列を先頭から順に1つづつ取り出して、事前に決めた鍵(0x19)でxor演算を行っている。<br />
+バーナム暗号を解くプログラムでした。<br />
+判明している暗号文と鍵を使って復号すればフラグゲット。
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+      <span>xor.py</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">crypt_string = [0x7a, 0x69, 0x78, 0x6e, 0x62, 0x6f, 0x7c, 0x6b, 0x77, 0x78, 0x74, 0x38, 0x38, 0x64]
+
+key = 0x19
+
+decode_string = []
+
+for i in crypt_string:
+  decode_string.append(chr(key^i))
+
+dec_str_sharping = &#39;&#39;.join(decode_string)
+
+print(dec_str_sharping)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<h3 id="備忘録-暗号文をpythonのリストで扱うための準備">備忘録 - 暗号文をpythonのリストで扱うための準備</h3>
+
+<ol>
+<li><p>objdumpで表示された該当部分が含まれた行をファイルにコピーして、vimの矩形選択を駆使して不要な部分を削る。</p>
+<pre><code>0x7a
+0x69
+0x78
+0x6e
+0x62
+0x6f
+0x7c
+0x6b
+0x77
+0x78
+0x74
+0x38
+0x38
+0x64</code></pre></li>
+
+<li><p><code>cat &lt;file&gt; | xargs | sed -e 's/ /, /g' | sed -e 's/^/[/' | sed -e 's/$/]/'</code>を実行する。出力されたものを.pyファイルに貼り付ける。</p>
+<pre><code>[0x7a, 0x69, 0x78, 0x6e, 0x62, 0x6f, 0x7c, 0x6b, 0x77, 0x78, 0x74, 0x38, 0x38, 0x64]</code></pre></li>
+</ol>
+
+<h1 id="二問目-baby-s-sqli-stage2-ジャンル-web">二問目 Baby&rsquo;s SQLi -Stage2- ジャンル・Web</h1>
+
+<hr />
+
+<h2 id="問題-1">問題</h2>
+
+<p>うーん，ぱろっく先生深くまで逃げ込んでたか．
+そこまで難しくは無いと思うんだけども……．</p>
+
+<p>えっ？何の話か分からない？
+さてはStage 1をクリアしてないな．
+待っているから，先にStage 1をクリアしてからもう一度来てね．</p>
+
+<p>Caution: sandbox.spica.bzの80,443番ポート以外への攻撃は絶対にしないようにお願いします．</p>
+
+<h2 id="解法-1">解法</h2>
+
+<p>Level2のBaby&rsquo;s SQLi -Level1-をクリアした際にこの問題にアクセスするためのURLが手に入るので、まずはそこからアクセス。<br />
+認証を突破することでフラグをゲットできる。<br />
+問題タイトルから分かるようにこの問題はSQLインジェクションを悪用することでクリアできる。</p>
+<pre><code>&#39; or 1=1 --</code></pre>
+<p>で一撃！！</p>
+
+<h1 id="三門目-remainder-theorem-ジャンル-ppc">三門目 Remainder theorem ジャンル・PPC</h1>
+
+<hr />
+
+<h2 id="問題-2">問題</h2>
+
+<p>x ≡ 32134 (mod 1584891)<br />
+x ≡ 193127 (mod 3438478)</p>
+
+<p>x = ?</p>
+
+<p>フラグはcpaw{xの値}です！</p>
+
+<h2 id="解法-2">解法</h2>
+
+<p>1584891で割ると余り32134、3438478で割ると余り193127、となる整数\(x\)を見つける。</p>
+
+<p>\(a=bq+r\)
+\((a,bは整数、qは商、rは余り。)\)<br />
+から、1つ目の\(x\)は<br />
+\[1584891n+32134\tag{1}\label{a}\]
+問題の2つの式に共通の\(x\)は
+\[(1)\div 3438478 = 193127\tag{2}\label{b}\]
+で求めることができる。<br />
+つまり\((1)\)の未知数\(n\)を一つづつ増やして\((2)\)を満たすときの\((1)\)がフラグとなる\(x\)である。</p>
               
             </div>
           </div>
@@ -295,7 +536,7 @@
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/07/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.2%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた（Level.2編）">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/07/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.2%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた(Level.2編)">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
@@ -359,7 +600,7 @@
           
             <li class="post-action">
               
-                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/07/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.2%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた（Level.2編）">
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/07/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.2%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた(Level.2編)">
               
                   <i class="fa fa-angle-left"></i>
                   <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
