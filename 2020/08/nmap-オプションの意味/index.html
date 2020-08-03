@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="しろくま">
+<meta name="keywords" content="tech">
+<meta name="description" content="旧サイト記事
+
+公式ドキュメントより
+書きかけ。">
+
+
+<meta property="og:description" content="旧サイト記事
+
+公式ドキュメントより
+書きかけ。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nmap オプションの意味">
+<meta name="twitter:title" content="Nmap オプションの意味">
+<meta property="og:url" content="https://divergen371.github.io/2020/08/nmap-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E6%84%8F%E5%91%B3/">
+<meta property="twitter:url" content="https://divergen371.github.io/2020/08/nmap-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E6%84%8F%E5%91%B3/">
+<meta property="og:site_name" content="しろくまの雑記帳">
+<meta property="og:description" content="旧サイト記事
+
+公式ドキュメントより
+書きかけ。">
+<meta name="twitter:description" content="旧サイト記事
+
+公式ドキュメントより
+書きかけ。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-08-01T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-08-01T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="tool">
+    
+      <meta property="article:section" content="portscanner">
+    
+  
+  
+    
+      <meta property="article:tag" content="tool">
+    
+      <meta property="article:tag" content="Nmap">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@aswzjd">
+
+
+  <meta name="twitter:creator" content="@aswzjd">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1594695699/MyTechBlog/alina-grubnyak-ZiQkhI7417A-unsplash_zq0wtu.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1594695699/MyTechBlog/alina-grubnyak-ZiQkhI7417A-unsplash_zq0wtu.jpg">
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594695699/MyTechBlog/alina-grubnyak-ZiQkhI7417A-unsplash_zq0wtu.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594695699/MyTechBlog/alina-grubnyak-ZiQkhI7417A-unsplash_zq0wtu.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+
+
+    <title>Nmap オプションの意味</title>
+
+    <link rel="icon" href="https://divergen371.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://divergen371.github.io/2020/08/nmap-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E6%84%8F%E5%91%B3/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://divergen371.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+   <script type="text/javascript" id="MathJax-script" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   MathJax.Hub.Config({
+     showProcessingMessages: false,
+     messageStyle: "none",
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       processEscapes: true
+     },
+     TeX: {
+       MultLineWidth: "100%",
+       equationNumbers: { autoNumber: "AMS" }
+     },
+     "HTML-CSS": { fonts: ["Latin-Modern"] }
+   });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script type="text/x-matjax-config">
+  MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+    var TEX = MathJax.InputJax.TeX;
+    var PREFILTER = TEX.prefilterMath;
+    TEX.Augment({
+      prefilterMath: function (math,displaymode,script) {
+        if (!displaymode) {math = "\\small{"+math+"}"}
+        return PREFILTER.call(TEX,math,displaymode,script);
+      }
+    });
+  });
+</script>h
+
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://divergen371.github.io/">しろくまの雑記帳</a>
+  </div>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://divergen371.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">しろくま</h4>
+        
+          <h5 class="sidebar-profile-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/divergen371" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/aswzjd" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594695699/MyTechBlog/alina-grubnyak-ZiQkhI7417A-unsplash_zq0wtu.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      Nmap オプションの意味
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-08-01T00:00:00Z">
+        
+  August 1, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/tool">tool</a>, 
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/portscanner">portscanner</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>旧サイト記事</p>
+
+<p>公式ドキュメントより<br />
+書きかけ。</p>
+
+<div class="alert warning ">
+  <p>自身が所有していないサーバーへの許可なきポートスキャンは、攻撃、あるいはその予告とみなされ、トラブルの原因となることが予想されます。<br />
+自身の行動が招く結果を意識して、冷静に。</p>
+</div>
+
+<h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#スキャンモードオプション">スキャンモードオプション</a></li>
+</ul>
+</nav>
+
+<h1 id="スキャンモードオプション">スキャンモードオプション</h1>
+
+<ul>
+<li>-sS: SYNスキャン</li>
+</ul>
+
+<p>Stealth scanと呼ばれる。SYNに対してACKが帰ってきたら、RSTを送って3WAY Handshakeを確立させない。
+そのため、ターゲットにログが残らないという仕組み。
+最近のIDS/IPSはだいたいSYNスキャンに対応しているので隠密性に期待するというよりは、
+スキャンが高速であるという点から多用される。
+管理者権限でないと使用できないのと、状況によっては誤検知してしまう点に注意。</p>
+
+<hr />
+
+<ul>
+<li>-sT: Connectスキャン</li>
+</ul>
+
+<p>3WAY Handshakeで接続してスキャンする。
+ログが残るかどうかは相手次第。(ログレベルの設定とか設計による。)</p>
+
+<hr />
+
+<ul>
+<li>-sU: UDPスキャン</li>
+</ul>
+
+<p>NmapはデフォルトでTCPスキャンを行うため、UDPプロトコルを用いたスキャンはこのオプションを指定しなければ使えない。
+UDPスキャンは時間がかかる上に、コネクションを確立しないのでopenなのかcloseなのか、そもそもターゲットホストの死活も判別がつかない。
+UDPを使うサービスは主にDNS(53)、SNMP(161)、DHCP(53、161/162、67/68)などなど。
+全ポートスキャンするのに18時間かかるので-Fオプションとか、&ndash;top-ports、&ndash;host-timeoutなどでスキャンタスクをコントロールしたほうがよさそうだ。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/tool/">tool</a>
+
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/nmap/">Nmap</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/docker%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6web%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%8F%E3%83%83%E3%82%AD%E3%83%B3%E3%82%B0%E3%83%A9%E3%83%9C%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" data-tooltip="Dockerを使ってWebアプリのハッキングラボをセットアップしてみた">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/nmap%E3%83%81%E3%83%BC%E3%83%88%E3%82%B7%E3%83%BC%E3%83%88/" data-tooltip="Nmapチートシート">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/08/nmap-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E6%84%8F%E5%91%B3/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 しろくま. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/docker%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6web%E3%82%A2%E3%83%97%E3%83%AA%E3%81%AE%E3%83%8F%E3%83%83%E3%82%AD%E3%83%B3%E3%82%B0%E3%83%A9%E3%83%9C%E3%82%92%E3%82%BB%E3%83%83%E3%83%88%E3%82%A2%E3%83%83%E3%83%97%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9F/" data-tooltip="Dockerを使ってWebアプリのハッキングラボをセットアップしてみた">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/nmap%E3%83%81%E3%83%BC%E3%83%88%E3%82%B7%E3%83%BC%E3%83%88/" data-tooltip="Nmapチートシート">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/08/nmap-%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3%E3%81%AE%E6%84%8F%E5%91%B3/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fdivergen371.github.io%2F2020%2F08%2Fnmap-%25E3%2582%25AA%25E3%2583%2597%25E3%2582%25B7%25E3%2583%25A7%25E3%2583%25B3%25E3%2581%25AE%25E6%2584%258F%25E5%2591%25B3%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">しろくま</h4>
+    
+      <div id="about-card-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</div>
+    
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Japan
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594722855/MyTechBlog/jr-korpa-mDvtYjZR8QI-unsplash_pjjiv2.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://divergen371.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.74.3 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="しろくま">
+<meta name="keywords" content="tech">
+<meta name="description" content="">
+
+
+<meta property="og:description" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CpawCTFにチャレンジしてみた(Level.3編)">
+<meta name="twitter:title" content="CpawCTFにチャレンジしてみた(Level.3編)">
+<meta property="og:url" content="https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/">
+<meta property="twitter:url" content="https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/">
+<meta property="og:site_name" content="しろくまの雑記帳">
+<meta property="og:description" content="">
+<meta name="twitter:description" content="">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-08-03T00:00:00">
+  
+  
+    <meta property="article:modified_time" content="2020-08-03T00:00:00">
+  
+  
+  
+    
+      <meta property="article:section" content="CTF">
+    
+      <meta property="article:section" content="Cpaw">
+    
+  
+  
+    
+      <meta property="article:tag" content="Cpaw">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@aswzjd">
+
+
+  <meta name="twitter:creator" content="@aswzjd">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1594695979/MyTechBlog/jeremy-bishop-uLXBeh6oHn8-unsplash_r7mfuv.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1594695979/MyTechBlog/jeremy-bishop-uLXBeh6oHn8-unsplash_r7mfuv.jpg">
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594695979/MyTechBlog/jeremy-bishop-uLXBeh6oHn8-unsplash_r7mfuv.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594695979/MyTechBlog/jeremy-bishop-uLXBeh6oHn8-unsplash_r7mfuv.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+
+
+    <title>CpawCTFにチャレンジしてみた(Level.3編)</title>
+
+    <link rel="icon" href="https://divergen371.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://divergen371.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+   <script type="text/javascript" id="MathJax-script" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   MathJax.Hub.Config({
+     showProcessingMessages: false,
+     messageStyle: "none",
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       processEscapes: true
+     },
+     TeX: {
+       MultLineWidth: "100%",
+       equationNumbers: { autoNumber: "AMS" }
+     },
+     "HTML-CSS": { fonts: ["Latin-Modern"] }
+   });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script type="text/x-matjax-config">
+  MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+    var TEX = MathJax.InputJax.TeX;
+    var PREFILTER = TEX.prefilterMath;
+    TEX.Augment({
+      prefilterMath: function (math,displaymode,script) {
+        if (!displaymode) {math = "\\small{"+math+"}"}
+        return PREFILTER.call(TEX,math,displaymode,script);
+      }
+    });
+  });
+</script>h
+
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://divergen371.github.io/">しろくまの雑記帳</a>
+  </div>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://divergen371.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">しろくま</h4>
+        
+          <h5 class="sidebar-profile-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/divergen371" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/aswzjd" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594695979/MyTechBlog/jeremy-bishop-uLXBeh6oHn8-unsplash_r7mfuv.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      CpawCTFにチャレンジしてみた(Level.3編)
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-08-03T00:00:00Z">
+        
+  August 3, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/ctf">CTF</a>, 
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/cpaw">Cpaw</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#一問目-またやらかした-ジャンル-reversing">一問目 またやらかした! ジャンル・Reversing</a>
+<ul>
+<li><a href="#問題">問題</a></li>
+<li><a href="#解法">解法</a>
+<ul>
+<li><a href="#備忘録-暗号文をpythonのリストで扱うための準備">備忘録 - 暗号文をpythonのリストで扱うための準備</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#二問目-baby-s-sqli-stage2-ジャンル-web">二問目 Baby&rsquo;s SQLi -Stage2- ジャンル・Web</a>
+<ul>
+<li><a href="#問題-1">問題</a></li>
+<li><a href="#解法-1">解法</a></li>
+</ul></li>
+<li><a href="#三問目-remainder-theorem-ジャンル-ppc">三問目 Remainder theorem ジャンル・PPC</a>
+<ul>
+<li><a href="#問題-2">問題</a></li>
+<li><a href="#解法-2">解法</a></li>
+</ul></li>
+<li><a href="#四問目-common-world-ジャンル-crypto">四問目 Common World ジャンル・crypto</a>
+<ul>
+<li><a href="#問題-3">問題</a></li>
+<li><a href="#解法-3">解法</a></li>
+</ul></li>
+</ul>
+</nav>
+
+<h1 id="一問目-またやらかした-ジャンル-reversing">一問目 またやらかした! ジャンル・Reversing</h1>
+
+<hr />
+
+<h2 id="問題">問題</h2>
+
+<p>またprintf()をし忘れたプログラムが見つかった。<br />
+とある暗号を解くプログラムらしい。</p>
+
+<h2 id="解法">解法</h2>
+
+<p>とりあえずfileコマンド</p>
+<pre><code>rev200: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV),  
+dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.24,  
+BuildID[sha1]=e87140105d6b5c8ea9b0193380ab3b79bfdcd85b, not stripped</code></pre>
+<p>stringsコマンド叩いても、これといった情報は出てこない。<br />
+objdumpで中身を覗きmain関数をチェックしようと思う。</p>
+<pre><code>080483ed &lt;main&gt;:
+ 80483ed:       55                      push   %ebp
+ 80483ee:       89 e5                   mov    %esp,%ebp
+ 80483f0:       57                      push   %edi
+ 80483f1:       53                      push   %ebx
+ 80483f2:       83 c4 80                add    $0xffffff80,%esp
+ 80483f5:       c7 45 88 7a 00 00 00    movl   $0x7a,-0x78(%ebp)
+ 80483fc:       c7 45 8c 69 00 00 00    movl   $0x69,-0x74(%ebp)
+ 8048403:       c7 45 90 78 00 00 00    movl   $0x78,-0x70(%ebp)
+ 804840a:       c7 45 94 6e 00 00 00    movl   $0x6e,-0x6c(%ebp)
+ 8048411:       c7 45 98 62 00 00 00    movl   $0x62,-0x68(%ebp)
+ 8048418:       c7 45 9c 6f 00 00 00    movl   $0x6f,-0x64(%ebp)
+ 804841f:       c7 45 a0 7c 00 00 00    movl   $0x7c,-0x60(%ebp)
+ 8048426:       c7 45 a4 6b 00 00 00    movl   $0x6b,-0x5c(%ebp)
+ 804842d:       c7 45 a8 77 00 00 00    movl   $0x77,-0x58(%ebp)
+ 8048434:       c7 45 ac 78 00 00 00    movl   $0x78,-0x54(%ebp)
+ 804843b:       c7 45 b0 74 00 00 00    movl   $0x74,-0x50(%ebp)
+ 8048442:       c7 45 b4 38 00 00 00    movl   $0x38,-0x4c(%ebp)
+ 8048449:       c7 45 b8 38 00 00 00    movl   $0x38,-0x48(%ebp)
+ 8048450:       c7 45 bc 64 00 00 00    movl   $0x64,-0x44(%ebp)
+ 8048457:       c7 45 84 19 00 00 00    movl   $0x19,-0x7c(%ebp)
+ 804845e:       8d 5d c0                lea    -0x40(%ebp),%ebx
+ 8048461:       b8 00 00 00 00          mov    $0x0,%eax
+ 8048466:       ba 0e 00 00 00          mov    $0xe,%edx
+ 804846b:       89 df                   mov    %ebx,%edi
+ 804846d:       89 d1                   mov    %edx,%ecx
+ 804846f:       f3 ab                   rep stos %eax,%es:(%edi)
+ 8048471:       c7 45 80 00 00 00 00    movl   $0x0,-0x80(%ebp)
+ 8048478:       eb 17                   jmp    8048491 &lt;main+0xa4&gt;
+ 804847a:       8b 45 80                mov    -0x80(%ebp),%eax
+ 804847d:       8b 44 85 88             mov    -0x78(%ebp,%eax,4),%eax
+ 8048481:       33 45 84                xor    -0x7c(%ebp),%eax
+ 8048484:       89 c2                   mov    %eax,%edx
+ 8048486:       8b 45 80                mov    -0x80(%ebp),%eax
+ 8048489:       89 54 85 c0             mov    %edx,-0x40(%ebp,%eax,4)
+ 804848d:       83 45 80 01             addl   $0x1,-0x80(%ebp)
+ 8048491:       83 7d 80 0d             cmpl   $0xd,-0x80(%ebp)
+ 8048495:       7e e3                   jle    804847a &lt;main+0x8d&gt;
+ 8048497:       b8 00 00 00 00          mov    $0x0,%eax
+ 804849c:       83 ec 80                sub    $0xffffff80,%esp
+ 804849f:       5b                      pop    %ebx
+ 80484a0:       5f                      pop    %edi
+ 80484a1:       5d                      pop    %ebp
+ 80484a2:       c3                      ret
+ 80484a3:       66 90                   xchg   %ax,%ax
+ 80484a5:       66 90                   xchg   %ax,%ax
+ 80484a7:       66 90                   xchg   %ax,%ax
+ 80484a9:       66 90                   xchg   %ax,%ax
+ 80484ab:       66 90                   xchg   %ax,%ax
+ 80484ad:       66 90                   xchg   %ax,%ax
+ 80484af:       90                      nop</code></pre>
+<ul>
+<li><code>80483f5</code>から<code>8048457</code>にかけてスタックに数値を格納している。<br /></li>
+<li>レジスタへの数値の代入・コピーを経て<code>8048478</code>のジャンプ命令で<code>8048491</code>に移動、<code>-0x80(%ebp)ebp</code>と数値<code>0xd(13)</code>を比較する。<br /></li>
+<li><code>8048495</code>のjle命令により<code>-0x80(%ebp)</code>が数値<code>0xd</code>より少ないか、等しい場合に<code>804847a</code>に移動する。</li>
+<li><code>8048481</code>でスタックに格納した数値と<code>-0x7c(%ebp)</code>のxorをとり、<code>-0x40(%ebp)</code>に格納する。</li>
+<li><code>-0x80(%ebp)</code>に1を加算して<code>8048491</code>比較する。</li>
+<li>以降、条件を満たすまでループ。
+<br /></li>
+</ul>
+
+<p>ASCIIコードの16進数に変換された文字列を先頭から順に1つづつ取り出して、事前に決めた鍵(0x19)でxor演算を行っている。<br />
+バーナム暗号を解くプログラムでした。<br />
+判明している暗号文と鍵を使って復号すればフラグゲット。
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+      <span>xor.py</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">crypt_string = [0x7a, 0x69, 0x78, 0x6e, 0x62, 0x6f, 0x7c, 0x6b, 0x77, 0x78, 0x74, 0x38, 0x38, 0x64]
+
+key = 0x19
+
+decode_string = []
+
+for i in crypt_string:
+  decode_string.append(chr(key^i))
+
+dec_str_sharping = &#39;&#39;.join(decode_string)
+
+print(dec_str_sharping)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<h3 id="備忘録-暗号文をpythonのリストで扱うための準備">備忘録 - 暗号文をpythonのリストで扱うための準備</h3>
+
+<p>複数行に記載された内容を1列にまとめる方法。+α<br />
+暗号文だからどうこうってわけではないです。</p>
+
+<ol>
+<li><p>objdumpで表示された該当部分が含まれた行をファイルにコピーして、vimの矩形選択を駆使して不要な部分を削る。</p>
+<pre><code>0x7a
+0x69
+0x78
+0x6e
+0x62
+0x6f
+0x7c
+0x6b
+0x77
+0x78
+0x74
+0x38
+0x38
+0x64</code></pre></li>
+
+<li><p><code>cat &lt;file&gt; | xargs | sed -e 's/ /, /g' | sed -e 's/^/[/' | sed -e 's/$/]/'</code>を実行する。出力されたものを.pyファイルに貼り付ける。</p>
+<pre><code>[0x7a, 0x69, 0x78, 0x6e, 0x62, 0x6f, 0x7c, 0x6b, 0x77, 0x78, 0x74, 0x38, 0x38, 0x64]</code></pre></li>
+</ol>
+
+<h1 id="二問目-baby-s-sqli-stage2-ジャンル-web">二問目 Baby&rsquo;s SQLi -Stage2- ジャンル・Web</h1>
+
+<hr />
+
+<h2 id="問題-1">問題</h2>
+
+<p>うーん，ぱろっく先生深くまで逃げ込んでたか．
+そこまで難しくは無いと思うんだけども……．</p>
+
+<p>えっ？何の話か分からない？
+さてはStage 1をクリアしてないな．
+待っているから，先にStage 1をクリアしてからもう一度来てね．</p>
+
+<p>Caution: sandbox.spica.bzの80,443番ポート以外への攻撃は絶対にしないようにお願いします．</p>
+
+<h2 id="解法-1">解法</h2>
+
+<p>Level2のBaby&rsquo;s SQLi -Level1-をクリアした際にこの問題にアクセスするためのURLが手に入るので、まずはそこからアクセス。<br />
+認証を突破することでフラグをゲットできる。<br />
+問題タイトルから分かるようにこの問題はSQLインジェクションを悪用することでクリアできる。</p>
+<pre><code>&#39; or 1=1 --</code></pre>
+<p>で一撃!!</p>
+
+<h1 id="三問目-remainder-theorem-ジャンル-ppc">三問目 Remainder theorem ジャンル・PPC</h1>
+
+<hr />
+
+<h2 id="問題-2">問題</h2>
+
+<p>x ≡ 32134 (mod 1584891)<br />
+x ≡ 193127 (mod 3438478)</p>
+
+<p>x = ?</p>
+
+<p>フラグはcpaw{xの値}です！</p>
+
+<h2 id="解法-2">解法</h2>
+
+<p>1584891で割ると余り32134、3438478で割ると余り193127、となる整数\(x\)を見つける。</p>
+
+<p>\[a=bq+r (a,bは整数、qは商、rは余り。)\]<br />
+から、1つ目の\(x\)は<br />
+\[1584891n+32134\tag{1}\label{a}\]
+問題の2つの式に共通の\(x\)は
+\[(1)\div 3438478 = 193127\tag{2}\label{b}\]
+で求めることができる。<br />
+つまり\((1)\)の未知数\(n\)を一つづつ増やして\((2)\)を満たすときの\((1)\)がフラグとなる\(x\)である。<br />
+pythonで求める。
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+      <span>remainder.py</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">a = 32134
+b = 1584891
+c = 193127
+d = 3438478
+
+for n in range(d):
+    x = b * n &#43; a
+    if x % d == c:
+        print(x)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+未知数\(n\)を一つづつ調べる方法しかないのだろうか？<br />
+もっとスマートな解法があったら教えてほしいです。</p>
+
+<h1 id="四問目-common-world-ジャンル-crypto">四問目 Common World ジャンル・crypto</h1>
+
+<hr />
+
+<h2 id="問題-3">問題</h2>
+
+<p>Cpaw君は,以下の公開鍵を用いて暗号化された暗号文Cを受け取りました．しかしCpaw君は秘密鍵を忘れてしまいました.Cpaw君のために暗号文を解読してあげましょう.</p>
+
+<p>(e, N) = (11, 23693404974311626713799908224337263180978956748208391871783264281009736
+3305512293474568071369055296264199854438630820352634325357252399203160052660683745421710<br />
+1748263231924758704973191054184356468204948649877872869418172246590734972127684806183871
+5247787844960300818709714859953420605531880765790249385018069509164657587891653174207695<br />
+1110529004783428260456713315007812112632429296257313525506207087475539303737022587194108<br />
+4361327579792733915942991371762279249041261612340053215837208367332056390526155380543994
+5266963740010502842854575184403622965741284446903497080756233652715896577990317530555057<br />
+0647732255961850364080642984562893392375273054434538280546913977098212083374336482279710<br />
+3489585367642298037434043252582297073148442559174975317352511053893661762287418060643782
+9368289087755832583487337161513547462791398199412369217291852462540796673123825751960361<br />
+4744577)</p>
+
+<p>暗号文: 80265690974140286785447882525076768851800986505783169077080797677035805215248640<br />
+4651594464261934222639124230673926517191202829689333147187806856294662847451213035944957<br />
+59721471318134122366715904</p>
+
+<p>これは&hellip;？</p>
+
+<p>フラグは以下のシンタックスです。<br />
+cpaw{復号した値}</p>
+
+<p>※復号した値はそのままで良いですが，実は意味があります，余力がある人は考えてみてください.</p>
+
+<h2 id="解法-3">解法</h2>
+
+<p>これは&hellip;?と書かれたリンクに、ヒントとして\(e=13\)を用いた場合の暗号文が提示されているので確認してみる。<br />
+ヒントにRSA暗号とあるので問題名と合わせて「Common RSA」でググってみる。<br />
+すると、Common Modulus Attackとでてくる。共通法攻撃というそうだ。<br />
+いくつかの情報源を読んだ上で以下のように定義されると解釈した。</p>
+
+<blockquote>
+<p>平文\(m\)を異なるRSA公開鍵\((n,e_1),(n,e_2)\)で暗号化した\(c_1\)と\(c_2\)。<br />
+これら共通の\(n\)、それぞれの\(e\)と暗号文があり、且つ\(gcd(e_1,e_2)=1\)のとき<br />
+つまり\(e_1\)と\(e_2\)が互いに素となるとき、\(n,e_1,e_2,c_1,c_2\)から平文\(m\)を導くことができる。</p>
+</blockquote>
+
+<p>これを解くにはツールを自作するか、拾ってくる必要がある。<br />
+(ツールの例としてはRsaCtfToolなど。)<br />
+ただ今回の問題は\(\sqrt\frac{c_2}{c_1} \)で解けるのでSageMathのように巨大な数を扱える環境さえあればツールを自作する必要はないです。<br />
+問題文にある通りフラグはそのまま通るが、とある古代ギリシャ人の歴史家が発明した換字式暗号による暗号文となっている。</p>
+
+<hr />
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/cpaw/">Cpaw</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.1%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた(Level.1編)">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 しろくま. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.1%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた(Level.1編)">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fdivergen371.github.io%2F2020%2F08%2Fcpawctf%25E3%2581%25AB%25E3%2583%2581%25E3%2583%25A3%25E3%2583%25AC%25E3%2583%25B3%25E3%2582%25B8%25E3%2581%2597%25E3%2581%25A6%25E3%2581%25BF%25E3%2581%259Flevel.3%25E7%25B7%25A8%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">しろくま</h4>
+    
+      <div id="about-card-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</div>
+    
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Japan
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594722855/MyTechBlog/jr-korpa-mDvtYjZR8QI-unsplash_pjjiv2.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://divergen371.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
