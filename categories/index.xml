@@ -6,10 +6,42 @@
     <description>Recent content in Categories on しろくまの雑記帳</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 03 Aug 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 08 Nov 2020 17:26:03 +0900</lastBuildDate><atom:link href="https://divergen371.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CTF</title>
+      <link>https://divergen371.github.io/categories/ctf/</link>
+      <pubDate>Sun, 08 Nov 2020 17:26:03 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/ctf/</guid>
+      <description></description>
+    </item>
     
-	<atom:link href="https://divergen371.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>TryHackMe</title>
+      <link>https://divergen371.github.io/categories/tryhackme/</link>
+      <pubDate>Sun, 08 Nov 2020 17:26:03 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/tryhackme/</guid>
+      <description></description>
+    </item>
     
+    <item>
+      <title>Hacking Lab</title>
+      <link>https://divergen371.github.io/categories/hacking-lab/</link>
+      <pubDate>Sun, 18 Oct 2020 15:34:07 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/hacking-lab/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Lab Enviroment</title>
+      <link>https://divergen371.github.io/categories/lab-enviroment/</link>
+      <pubDate>Sun, 18 Oct 2020 15:34:07 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/categories/lab-enviroment/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Cpaw</title>
@@ -17,24 +49,6 @@
       <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
       
       <guid>https://divergen371.github.io/categories/cpaw/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>CTF</title>
-      <link>https://divergen371.github.io/categories/ctf/</link>
-      <pubDate>Mon, 03 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://divergen371.github.io/categories/ctf/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Hacking Lab</title>
-      <link>https://divergen371.github.io/categories/hacking-lab/</link>
-      <pubDate>Sat, 01 Aug 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://divergen371.github.io/categories/hacking-lab/</guid>
       <description></description>
     </item>
     

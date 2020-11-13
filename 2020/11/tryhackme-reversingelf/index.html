@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.78.1 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="しろくま">
+<meta name="keywords" content="tech">
+<meta name="description" content="最近ごぶさただったので復習として…。">
+
+
+<meta property="og:description" content="最近ごぶさただったので復習として…。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe: ReversingELF">
+<meta name="twitter:title" content="TryHackMe: ReversingELF">
+<meta property="og:url" content="https://divergen371.github.io/2020/11/tryhackme-reversingelf/">
+<meta property="twitter:url" content="https://divergen371.github.io/2020/11/tryhackme-reversingelf/">
+<meta property="og:site_name" content="しろくまの雑記帳">
+<meta property="og:description" content="最近ごぶさただったので復習として…。">
+<meta name="twitter:description" content="最近ごぶさただったので復習として…。">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-11-08T17:26:03">
+  
+  
+    <meta property="article:modified_time" content="2020-11-08T17:26:03">
+  
+  
+  
+    
+      <meta property="article:section" content="CTF">
+    
+      <meta property="article:section" content="TryHackMe">
+    
+  
+  
+    
+      <meta property="article:tag" content="TryHackMe">
+    
+      <meta property="article:tag" content="Rerverse">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@aswzjd">
+
+
+  <meta name="twitter:creator" content="@aswzjd">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1604824555/MyTechBlog/laura-ockel-RZSrqJjhkeg-unsplash_by9w8c.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1604824555/MyTechBlog/laura-ockel-RZSrqJjhkeg-unsplash_by9w8c.jpg">
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1604824555/MyTechBlog/laura-ockel-RZSrqJjhkeg-unsplash_by9w8c.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1604824555/MyTechBlog/laura-ockel-RZSrqJjhkeg-unsplash_by9w8c.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+
+
+    <title>TryHackMe: ReversingELF</title>
+
+    <link rel="icon" href="https://divergen371.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://divergen371.github.io/2020/11/tryhackme-reversingelf/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://divergen371.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+   <script type="text/javascript" id="MathJax-script" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   MathJax.Hub.Config({
+     showProcessingMessages: false,
+     messageStyle: "none",
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       processEscapes: true
+     },
+     TeX: {
+       MultLineWidth: "100%",
+       equationNumbers: { autoNumber: "AMS" }
+     },
+     "HTML-CSS": { fonts: ["Latin-Modern"] }
+   });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script type="text/x-matjax-config">
+  MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+    var TEX = MathJax.InputJax.TeX;
+    var PREFILTER = TEX.prefilterMath;
+    TEX.Augment({
+      prefilterMath: function (math,displaymode,script) {
+        if (!displaymode) {math = "\\small{"+math+"}"}
+        return PREFILTER.call(TEX,math,displaymode,script);
+      }
+    });
+  });
+</script>h
+
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://divergen371.github.io/">しろくまの雑記帳</a>
+  </div>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://divergen371.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">しろくま</h4>
+        
+          <h5 class="sidebar-profile-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/divergen371" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/aswzjd" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1604824555/MyTechBlog/laura-ockel-RZSrqJjhkeg-unsplash_by9w8c.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      TryHackMe: ReversingELF
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-11-08T17:26:03&#43;09:00">
+        
+  November 8, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/ctf">CTF</a>, 
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/tryhackme">TryHackMe</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>最近ごぶさただったので復習として…。</p>
+
+<h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#crackme1">Crackme1</a></li>
+<li><a href="#crackme2">Crackme2</a></li>
+<li><a href="#crackme3">crackme3</a></li>
+<li><a href="#crackme4">crackme4</a></li>
+<li><a href="#crackme5">crackme5</a></li>
+<li><a href="#crackme6">crackme6</a></li>
+<li><a href="#crackme7">crackme7</a></li>
+<li><a href="#crackme8">crackme8</a></li>
+</ul>
+</nav>
+
+<h1 id="crackme1">Crackme1</h1>
+
+<blockquote>
+<p>Let&rsquo;s start with a basic warmup, can you run the binary?</p>
+</blockquote>
+
+<p>落としたファイルに実行権限を与えてみる。</p>
+<pre><code>chmod +x ./crackme1
+
+./crackme1</code></pre>
+<p>フラグゲット。</p>
+
+<h1 id="crackme2">Crackme2</h1>
+
+<blockquote>
+<p>Find the super-secret password! and use it to obtain the flag.</p>
+</blockquote>
+
+<p><code>strings</code>コマンドを実行すると<code>super-secret password</code>が見える。</p>
+<pre><code>./crackme2 「見つけたパスワード」</code></pre>
+<p>でフラグゲット。</p>
+
+<h1 id="crackme3">crackme3</h1>
+
+<blockquote>
+<p>Use basic reverse engineering skills to obtain the flag.</p>
+</blockquote>
+
+<p><code>strings</code>コマンドの出力にbase64でエンコードされたと思しき文字列が見つかる。</p>
+
+<p>
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+      <span>dec_base64.py</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">import base64
+from sys import argv
+
+a = argv[1]  # type: str
+
+hash_dec = lambda x: print(str((base64.b64decode(x)), &#34;utf-8&#34;))
+inverted_hash_dec = lambda x: print(str((base64.b64decode(x[::-1])), &#34;utf-8&#34;))
+
+if a[0] == &#39;=&#39;:
+    inverted_hash_dec(a)
+elif a[0] != &#39;=&#39;:
+    hash_dec(a)</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+<code>lambda</code>は使いたかったから使っただけ。あまり褒められた使い方じゃないのはわかってる。</p>
+
+<p><code>python ./dec_base64.py 「エンコードされた文字列」</code>でフラグゲット。</p>
+
+<h1 id="crackme4">crackme4</h1>
+
+<blockquote>
+<p>Analyze and find the password for the binary?</p>
+</blockquote>
+
+<p>引数を与えずにバイナリを動かすと<code>This time the string is hidden and we used srtcmp</code>と返してくる。<br />
+これをヒントにバイナリを覗く。</p>
+
+<p><code>gdb</code>を起動して<code>info functions</code>と打つ。<br />
+
+
+
+<div class="figure center" >
+  
+    <img class="fig-img" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1604844368/MyTechBlog/20201108221327_cdjhbq.jpg"  alt="gdb info functions">
+  
+   
+    <span class="caption">gdb info functions</span>
+  
+</div>
+</p>
+
+<p>ヒントに基づき<code>strcmp@plt</code>に狙いを定める。</p>
+<pre><code>b strcomp@plt  
+  
+or  
+  
+b 0x0000000000400520</code></pre>
+<p>ブレークポイントを指定したら</p>
+<pre><code>r &lt;適当な文字列&gt;</code></pre>
+<p>でフラグゲット。</p>
+
+
+
+
+<div class="figure center" >
+  
+    <img class="fig-img" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1604846213/MyTechBlog/20201108232435_2_jdauny.jpg"  alt="gdb info registers">
+  
+   
+    <span class="caption">gdb info registers</span>
+  
+</div>
+
+
+<div class="alert info ">
+  <p><code>hyperpwn</code>を使用しているため、自動でレジスタやスタック、トレース情報などが表示されるので実行しただけで作業が終わっている。<br />
+素の<code>gdb</code>を使っているのなら、コマンド<code>x/s $rax</code>でレジスタの中身を覗く必要がある。<br />
+<code>rdx</code>を確認すると自分が入力した文字列を見ることができる。</p>
+</div>
+
+<h1 id="crackme5">crackme5</h1>
+
+<blockquote>
+<p>What will be the input of the file get output <code>Good Game</code>?</p>
+</blockquote>
+
+<p><code>crackme4</code>と同じ手法で攻略できる。<br />
+<code>srtcmp@plt</code>ではなく<code>strncmp@plt</code>を使っている点に注意。</p>
+
+<h1 id="crackme6">crackme6</h1>
+
+<blockquote>
+<p>Analyze the binary for the easy password.</p>
+</blockquote>
+
+<p>引数を渡さずに実行すると、ソースコードを読めと返してくるのでデコンパイル(以下デコパ)してみる。</p>
+<pre><code>yay -S r2ghidra-dec</code></pre>
+<p>で、radare2にGhidraのデコンパイラをインストール。<br />
+(r2pmでインストールしたらビルドエラーを吐いたので、yayでインストールした。)</p>
+<pre><code>r2 -d ./crackme6</code></pre>
+<p>起動したradare2で</p>
+<pre><code>aaa </code></pre>
+<p>として解析し</p>
+<pre><code>afl</code></pre>
+<p>で使用している関数を表示させる。いろいろ気になる関数名があるが、まずは<code>main</code>を覗いてみる。<br />
+ここで<code>r2ghidra</code>の出番。</p>
+<pre><code>[0x7fc778441090]&gt; pdg @main
+
+// WARNING: Variable defined which should be unmapped: var_4h
+// WARNING: [r2ghidra] Failed to match type int for variable argc to Decompiler type: Unknown type identifier int
+
+undefined8 main(undefined8 argc, char **argv)
+{
+    int64_t var_10h;
+    int64_t var_4h;
+
+    if ((int32_t)argc == 2) {
+        sym.compare_pwd((int64_t)argv[1]);
+    } else {
+        sym.imp.printf(&#34;Usage : %s password\nGood luck, read the source\n&#34;, *argv);
+    }
+    return 0;</code></pre>
+<p>コマンドライン引数が2つであるときに入力したパスワードを<code>sym.compare_pwd</code>に渡す。<br />
+<code>sym.compare_pwd</code>をデコパ。</p>
+<pre><code>[0x7fc778441090]&gt; pdg @sym.compare_pwd
+
+void sym.compare_pwd(int64_t arg1)
+{
+    int32_t iVar1;
+    int64_t var_8h;
+
+    iVar1 = sym.my_secure_test(arg1);
+    if (iVar1 == 0) {
+        sym.imp.puts(&#34;password OK&#34;);
+    } else {
+        sym.imp.printf(&#34;password \&#34;%s\&#34; not OK\n&#34;, arg1);
+    }
+    return;
+}</code></pre>
+<p><code>sym.my_secure_test</code>をデコパすると答えが出てくる。平文で。</p>
+
+<h1 id="crackme7">crackme7</h1>
+
+<blockquote>
+<p>Analyze the binary to get the flag.</p>
+</blockquote>
+
+<p>解法の考え方は<code>crackme6</code>同じ。</p>
+
+<p>以下、<code>main</code>関数をデコパしたもの。</p>
+<pre><code>[0xf7f7a0b0]&gt; pdg @main
+
+// WARNING: Variable defined which should be unmapped: var_8h
+// WARNING: [r2ghidra] Var argv is stack pointer based, which is not supported for decompilation.
+
+undefined4 main(void)
+{
+    int32_t iVar1;
+    undefined4 *puVar2;
+    uint8_t uVar3;
+    undefined4 uStack128;
+    int32_t var_78h;
+    int32_t iStack28;
+    int32_t var_14h;
+    int32_t var_10h;
+    int32_t var_ch;
+    int32_t var_8h;
+
+    uVar3 = 0;
+    var_ch = (int32_t)&amp;stack0x00000004;
+    while( true ) {
+        while( true ) {
+            sym.imp.puts(&#34;Menu:\n\n[1] Say hello\n[2] Add numbers\n[3] Quit&#34;);
+            sym.imp.printf(&#34;\n[&gt;] &#34;);
+            iVar1 = sym.imp.__isoc99_scanf(0x8048814, &amp;var_10h);
+            if (iVar1 != 1) {
+                sym.imp.puts(&#34;Unknown input!&#34;);
+                return 1;
+            }
+            if (var_10h != 1) break;
+            sym.imp.printf(&#34;What is your name? &#34;);
+            iVar1 = 0x19;
+            puVar2 = &amp;uStack128;
+            while (iVar1 != 0) {
+               iVar1 = iVar1 + -1;
+                *puVar2 = 0;
+                puVar2 = puVar2 + (uint32_t)uVar3 * -2 + 1;
+            }
+            iVar1 = sym.imp.__isoc99_scanf(&#34;%99s&#34;, &amp;uStack128);
+            if (iVar1 != 1) {
+                sym.imp.puts(&#34;Unable to read name!&#34;);
+                return 1;
+            }
+            sym.imp.printf(&#34;Hello, %s!\n&#34;, &amp;uStack128);
+        }
+        if (var_10h != 2) {
+            if (var_10h == 3) {
+                sym.imp.puts(&#34;Goodbye!&#34;);
+            } else {
+                if (var_10h == 0x7a69) {
+                    sym.imp.puts(&#34;Wow such h4x0r!&#34;);
+                    sym.giveFlag();
+                } else {
+                    sym.imp.printf(&#34;Unknown choice: %d\n&#34;, var_10h);
+                }
+            }
+            return 0;
+        }
+        sym.imp.printf(&#34;Enter first number: &#34;);
+        iVar1 = sym.imp.__isoc99_scanf(0x8048875, &amp;var_14h);
+        if (iVar1 != 1) break;
+        sym.imp.printf(&#34;Enter second number: &#34;);
+        iVar1 = sym.imp.__isoc99_scanf(0x8048875, &amp;iStack28);
+        if (iVar1 != 1) {
+            sym.imp.puts(&#34;Unable to read number!&#34;);
+            return 1;
+        }
+        sym.imp.printf(&#34;%d + %d = %d\n&#34;, var_14h, iStack28, var_14h + iStack28);
+    }
+    sym.imp.puts(&#34;Unable to read number!&#34;);
+    return 1;
+}
+ </code></pre>
+<p>この箇所</p>
+<pre><code>if (var_10h == 0x7a69) {
+    sym.imp.puts(&#34;Wow such h4x0r!&#34;);
+    sym.giveFlag();</code></pre>
+<p>条件を満たすとフラグを出力してくれるようだ。<br />
+条件となっている16進数を10進数に変換してプログラムに引数として渡せばフラグゲット。</p>
+
+<h1 id="crackme8">crackme8</h1>
+
+<blockquote>
+<p>Analyze the binary and obtain the flag</p>
+</blockquote>
+
+<p>引き続き似た解法となる。</p>
+<pre><code>[0xf7f230b0]&gt; pdg @main
+
+// WARNING: Variable defined which should be unmapped: var_4h
+// WARNING: [r2ghidra] Var argv is stack pointer based, which is not supported for decompilation.
+
+undefined4 main(int32_t param_1, undefined4 *param_2)
+{
+    undefined4 uVar1;
+    int32_t iVar2;
+    int32_t var_4h;
+
+    if (param_1 == 2) {
+        iVar2 = sym.imp.atoi(param_2[1]);
+        if (iVar2 == -0x35010ff3) {
+            sym.imp.puts(&#34;Access granted.&#34;);
+            sym.giveFlag();
+            uVar1 = 0;
+        } else {
+            sym.imp.puts(&#34;Access denied.&#34;);
+            uVar1 = 1;
+        }
+    } else {
+        sym.imp.printf(&#34;Usage: %s password\n&#34;, *param_2);
+        uVar1 = 1;
+    }
+    return uVar1;
+}</code></pre>
+<p><code>atoi</code>で2つ目のコマンドラインを文字列型から整数型に変換し、<code>-0x35010ff3</code>と比較。<br />
+一致すればフラグが得られる模様。<br />
+条件となっている16進数を10進数に変換してプログラムに引数として渡せばフラグゲット。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/tryhackme/">TryHackMe</a>
+
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/rerverse/">Rerverse</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/10/aws%E3%81%AE%E5%8A%9B%E3%82%92%E5%80%9F%E3%82%8A%E3%81%A6%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E8%A7%A3%E8%AA%AD%E3%82%92%E8%A9%A6%E3%81%BF%E3%82%8B/" data-tooltip="AWSの力を借りてハッシュの解読を試みる">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/11/tryhackme-reversingelf/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 しろくま. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/10/aws%E3%81%AE%E5%8A%9B%E3%82%92%E5%80%9F%E3%82%8A%E3%81%A6%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E8%A7%A3%E8%AA%AD%E3%82%92%E8%A9%A6%E3%81%BF%E3%82%8B/" data-tooltip="AWSの力を借りてハッシュの解読を試みる">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/11/tryhackme-reversingelf/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fdivergen371.github.io%2F2020%2F11%2Ftryhackme-reversingelf%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">しろくま</h4>
+    
+      <div id="about-card-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</div>
+    
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Japan
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594722855/MyTechBlog/jr-korpa-mDvtYjZR8QI-unsplash_pjjiv2.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://divergen371.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

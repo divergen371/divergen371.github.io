@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.78.1 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="しろくま">
+<meta name="keywords" content="tech">
+<meta name="description" content="">
+
+
+<meta property="og:description" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AWSの力を借りてハッシュの解読を試みる">
+<meta name="twitter:title" content="AWSの力を借りてハッシュの解読を試みる">
+<meta property="og:url" content="https://divergen371.github.io/2020/10/aws%E3%81%AE%E5%8A%9B%E3%82%92%E5%80%9F%E3%82%8A%E3%81%A6%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E8%A7%A3%E8%AA%AD%E3%82%92%E8%A9%A6%E3%81%BF%E3%82%8B/">
+<meta property="twitter:url" content="https://divergen371.github.io/2020/10/aws%E3%81%AE%E5%8A%9B%E3%82%92%E5%80%9F%E3%82%8A%E3%81%A6%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E8%A7%A3%E8%AA%AD%E3%82%92%E8%A9%A6%E3%81%BF%E3%82%8B/">
+<meta property="og:site_name" content="しろくまの雑記帳">
+<meta property="og:description" content="">
+<meta name="twitter:description" content="">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-10-18T15:34:07">
+  
+  
+    <meta property="article:modified_time" content="2020-10-18T15:34:07">
+  
+  
+  
+    
+      <meta property="article:section" content="Hacking Lab">
+    
+      <meta property="article:section" content="Lab Enviroment">
+    
+  
+  
+    
+      <meta property="article:tag" content="HashCat">
+    
+      <meta property="article:tag" content="AWS">
+    
+      <meta property="article:tag" content="tools">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@aswzjd">
+
+
+  <meta name="twitter:creator" content="@aswzjd">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1603003765/MyTechBlog/kaur-kristjan-CpPF4W5PB1c-unsplash_ytofye.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1603003765/MyTechBlog/kaur-kristjan-CpPF4W5PB1c-unsplash_ytofye.jpg">
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1603003826/MyTechBlog/kaur-kristjan-CpPF4W5PB1c-unsplash_bltdxm.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1603003826/MyTechBlog/kaur-kristjan-CpPF4W5PB1c-unsplash_bltdxm.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+
+
+    <title>AWSの力を借りてハッシュの解読を試みる</title>
+
+    <link rel="icon" href="https://divergen371.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://divergen371.github.io/2020/10/aws%E3%81%AE%E5%8A%9B%E3%82%92%E5%80%9F%E3%82%8A%E3%81%A6%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E8%A7%A3%E8%AA%AD%E3%82%92%E8%A9%A6%E3%81%BF%E3%82%8B/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://divergen371.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+   <script type="text/javascript" id="MathJax-script" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   MathJax.Hub.Config({
+     showProcessingMessages: false,
+     messageStyle: "none",
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       processEscapes: true
+     },
+     TeX: {
+       MultLineWidth: "100%",
+       equationNumbers: { autoNumber: "AMS" }
+     },
+     "HTML-CSS": { fonts: ["Latin-Modern"] }
+   });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script type="text/x-matjax-config">
+  MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+    var TEX = MathJax.InputJax.TeX;
+    var PREFILTER = TEX.prefilterMath;
+    TEX.Augment({
+      prefilterMath: function (math,displaymode,script) {
+        if (!displaymode) {math = "\\small{"+math+"}"}
+        return PREFILTER.call(TEX,math,displaymode,script);
+      }
+    });
+  });
+</script>h
+
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://divergen371.github.io/">しろくまの雑記帳</a>
+  </div>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://divergen371.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">しろくま</h4>
+        
+          <h5 class="sidebar-profile-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/divergen371" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/aswzjd" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1603003826/MyTechBlog/kaur-kristjan-CpPF4W5PB1c-unsplash_bltdxm.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      AWSの力を借りてハッシュの解読を試みる
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-10-18T15:34:07&#43;09:00">
+        
+  October 18, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/hacking-lab">Hacking Lab</a>, 
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/lab-enviroment">Lab Enviroment</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#イントロ">イントロ</a></li>
+<li><a href="#準備">準備</a>
+<ul>
+<li><a href="#必要なもの">必要なもの</a></li>
+<li><a href="#pipenvのインストール">Pipenvのインストール</a></li>
+<li><a href="#nodejsのインストール">nodejsのインストール</a></li>
+<li><a href="#awsシークレットキーを作成する">AWSシークレットキーを作成する</a></li>
+<li><a href="#aws-cliのインストール">AWS CLIのインストール</a>
+<ul>
+<li><a href="#aws-cliの初期設定">AWS CLIの初期設定</a></li>
+</ul></li>
+<li><a href="#aws-cdkをインストールする">AWS CDKをインストールする</a>
+<ul>
+<li><a href="#初期設定">初期設定</a></li>
+</ul></li>
+<li><a href="#vcpuの制限緩和を申請する">vCPUの制限緩和を申請する</a></li>
+<li><a href="#awsの基礎">AWSの基礎</a></li>
+<li><a href="#今回利用するインスタンスタイプとami">今回利用するインスタンスタイプとAMI</a>
+<ul>
+<li><a href="#インスタンスタイプについて">インスタンスタイプについて</a></li>
+<li><a href="#amiについて">AMIについて</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#インスタンスの作成とhashcatの導入">インスタンスの作成とHashcatの導入</a>
+<ul>
+<li><a href="#ディレクトリを作成しpipenvで初期化">ディレクトリを作成しPipenvで初期化</a></li>
+<li><a href="#aws-cdkパッケージをインストール">AWS_CDKパッケージをインストール</a></li>
+<li><a href="#cdkでインスタンスを構築する">CDKでインスタンスを構築する</a>
+<ul>
+<li><a href="#vpcの設定">VPCの設定</a></li>
+<li><a href="#セキュリティグループの設定">セキュリティグループの設定</a></li>
+<li><a href="#インスタンスの定義部">インスタンスの定義部</a></li>
+</ul></li>
+<li><a href="#インスタンス内でhashcatを使うための準備">インスタンス内でHashcatを使うための準備</a></li>
+<li><a href="#インスタンスの立ち上げ">インスタンスの立ち上げ</a>
+<ul>
+<li><a href="#シークレットキーをセットする">シークレットキーをセットする</a></li>
+<li><a href="#sshキーを生成する">SSHキーを生成する</a></li>
+<li><a href="#デプロイ">デプロイ</a></li>
+<li><a href="#送り込んだツールを実行する">送り込んだツールを実行する</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#hashcatを動かす">Hashcatを動かす</a>
+<ul>
+<li><a href="#ベンチマーク">ベンチマーク</a></li>
+<li><a href="#md5にアタック">md5にアタック</a></li>
+<li><a href="#sha256">sha256</a></li>
+</ul></li>
+<li><a href="#まとめ">まとめ</a></li>
+</ul>
+</nav>
+
+<h1 id="イントロ">イントロ</h1>
+
+<p>Arch Linuxでパスワードハッシュの解読を実行したところOpenCL絡みでうまく作動せず。<br />
+(公式リポジトリやAURにあるランタイムをインストールしたがダメだった。)</p>
+
+<p>代打で別のマシンで作業したみたけどCPUじゃ遅いし、ファンが煩いし、かといってGPUを積んだ<br />
+マシンを調達する資金もなく…。</p>
+
+<p>そんな折、初夏に<a href="https://tomomano.gitlab.io/intro-aws/">AWSによるクラウド入門</a>
+を実践しAWSの利用方法の基礎を学んだことを思い出したので、パスワードクラック
+に応用してみた際の記録。</p>
+
+<div class="alert warning ">
+  <p>この記事は私の備忘録を主な目的としています。<br />
+参考にするのは構いませんが、行為の責任主体はあくまで行為者・実行者にあります。<br />
+(私とこの記事は何も強要していないので。)<br />
+参考にした場合の損害等について私は一切関知いたしません。</p>
+</div>
+
+<h1 id="準備">準備</h1>
+
+<h2 id="必要なもの">必要なもの</h2>
+
+<ul>
+<li>お気に入りのターミナルとシェル</li>
+<li>Python</li>
+<li>Pipenv (Pipenvでプロジェクトを作成してその中で作業していく)</li>
+<li>Node.js (AWS CDKをインストールするのに<code>npm</code>が必要)</li>
+<li>AWSのアカウント</li>
+<li>AWS CLI</li>
+<li>AWS CDK</li>
+</ul>
+
+<div class="alert warning ">
+  <p>AWSアカウントと作成、AWS利用にかかるアカウントのセキュリティ(IAM)、多要素認証などの説明は省略します。<br />
+無料サービスの範囲、各サービスの料金体系などはこの記事で言及するよりも、AWSのサイトに目を通したほうが良いと思うのでこれも記載しません。</p>
+</div>
+
+<h2 id="pipenvのインストール">Pipenvのインストール</h2>
+
+<p><code>pip install --user pipenv</code>か各種パッケージマネージャでインストールする。<br />
+<code>export PIPENV_VENV_IN_PROJECT=1</code>をシェルの設定ファイルに記載しておく。</p>
+
+<div class="alert info ">
+  <p><p><a href="https://github.com/pyenv/pyenv">pyenv</a>をインストールしておくと、PipenvでシステムにないPythonバージョンを指定したときに自動的にダウンロード・コンパイルしてくれる。<br />
+<a href="https://github.com/anyenv/anyenv">anyenv</a>を導入し、経由してインストールする。　　
+それぞれの導入方法はリンク先を参照。</p>
+
+<ul>
+<li>anyenvはアップデートプラグインが便利なので追加でインストールしておく。<br /></li>
+<li>pyenvがPythonのコンパイルに失敗するときはパッケージの依存関係が原因。GithubのWikiを参照のこと。</li>
+</ul>
+</p>
+</div>
+
+<h2 id="nodejsのインストール">nodejsのインストール</h2>
+
+<p>パッケージマネージャでインストールすると不便なことが多々あるため<code>n</code>を使う。</p>
+
+<ol>
+<li>まずはパッケージマネージャ等でインストールする。</li>
+<li><code>sudo npm i -g n</code>と打って<code>n</code>をインストールする。</li>
+<li><code>sudo n stable</code>あるいは<code>n --lts</code>と打って<code>node</code>をインストールする。</li>
+<li>最初に入れた<code>node</code>、<code>npm</code>はアンインストールする。</li>
+</ol>
+
+<h2 id="awsシークレットキーを作成する">AWSシークレットキーを作成する</h2>
+
+<ol>
+<li>AWSにログインする。</li>
+<li>右上のアカウント名をクリックしてプルダウンメニューを開き、<code>My Security Credentials(あるいはマイセキュリティ認証情報)</code>をクリック。</li>
+<li>AWS IAM 認証情報内の「CLI、SDK、&amp;APIアクセスに使用するAWSアクセスキー」(もし表示が英語のままなら<code>Access keys for ~</code>)の下にあるアクセスキーの作成をクリック。</li>
+<li>表示された「アクセスキーID」と「シークレットアクセスキー」を記録しておく。</li>
+<li>発行したキーは<code>~/.aws/credentials</code>に書き込むか環境変数に設定して使う。(後述するAWS CLIの初期設定でも設定出来る。)</li>
+</ol>
+
+<h2 id="aws-cliのインストール">AWS CLIのインストール</h2>
+
+<p><a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html">公式のドキュメント</a>に従えばOK。</p>
+
+<ul>
+<li><p><a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-linux.html">Linuxの場合</a></p>
+<pre><code>❯ curl &#34;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip&#34; -o &#34;awscliv2.zip&#34;  
+❯ unzip awscliv2.zip  
+❯ sudo ./aws/install  </code></pre></li>
+
+<li><p><a href="https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2-mac.html">Macの場合</a></p>
+<pre><code>❯ curl &#34;https://awscli.amazonaws.com/AWSCLIV2.pkg&#34; -o &#34;AWSCLIV2.pkg&#34;
+❯ sudo installer -pkg AWSCLIV2.pkg -target /</code></pre></li>
+</ul>
+
+<p>CLIのバージョンを指定してインストールしたい場合はドキュメントを参照すること。</p>
+
+<p><code>aws --version</code>と打ってインストールできたか確認。バージョンが表示されればOK。</p>
+
+<h3 id="aws-cliの初期設定">AWS CLIの初期設定</h3>
+
+<p><code>aws congigure</code>と打って初期設定を開始する。<br />
+<code>AWS Access Key ID</code>と<code>AWS Secret Access Key</code>を入力するように指示されるので、先に作成し控えたキーをそれぞれ入力する。<br />
+次に<code>Default region name</code>を訪ねてくるので<code>ap-northeast-1(東京リージョン)</code>を指定する。最後に<code>Default output format</code><br />
+を聞かれるがこれは<code>json</code>としておく。</p>
+
+<p>念の為、<code>${HOME}/.aws/</code>直下の<code>config</code>と<code>credentials</code>をチェックしておく。</p>
+<pre><code>❯ cat ~/.aws/config 
+[default]
+region = ap-northeast-1
+output = json</code></pre><pre><code>❯ cat ~/.aws/credentials
+[default]
+aws_access_key_id = XXXXXXXXXXXXXXXXXXX
+aws_secret_access_key = YYYYYYYYYYYYYYYYYYY</code></pre>
+<p>上記のフォーマットに従ってプロファイルを追加することも可能でありAWS CLIでコマンドを打つときに<code>--profile &lt;プロファイル名&gt;</code>で指定できる。<br />
+それと、環境変数で指定したプロファイルは上記ファイルよりも優先度が高い。</p>
+
+<h2 id="aws-cdkをインストールする">AWS CDKをインストールする</h2>
+
+<p>これもまた<a href="https://docs.aws.amazon.com/cdk/latest/guide/getting_started.html">公式ドキュメント</a>を頼りにインストールすれば良い。<br />
+具体的には</p>
+<pre><code>❯ sudo npm i -g aws-cdk</code></pre>
+<div class="alert info ">
+  <p><p>CDKは開発進行中のライブラリであるため、APIの破壊的変更が行われる可能性がある。<br />
+もし、エラーが発生したら最新版ではなくVersion1.68で試すこと。</p>
+<pre><code>sudo npm i -g aws-cdk@1.68</code></pre></p>
+</div>
+
+<h3 id="初期設定">初期設定</h3>
+
+<p>cdk.jsonファイルがある場所で</p>
+<pre><code>cdk bootstrap</code></pre>
+<div class="alert info ">
+  <p>cdk bootstrapを実行する際、AWSの認証情報と使用したいリージョン名が正しく設定されていることを確認する。
+デフォルトで<code>~/.aws/</code>以下の情報を利用するが、それ以外の情報を利用したい場合は環境変数で指定する</p>
+</div>
+
+<h2 id="vcpuの制限緩和を申請する">vCPUの制限緩和を申請する</h2>
+
+<p>今回利用する予定の<code>g4dn.xlarge</code>はvCPUを4つ必要とする。<br />
+AWSアカウントを作ってそのままの場合利用できるvCPUは<code>0</code>個なので制限緩和申請を行う必要がある。<br />
+EC2ダッシュボードの<code>制限</code>の<code>制限計算ツール</code>でインスタンスタイプとインスタンス数を指定してオプションからリクエストを出す。</p>
+
+<h2 id="awsの基礎">AWSの基礎</h2>
+
+<p>東京大学計数工学科の講義資料「<a href="https://tomomano.gitlab.io/intro-aws/">AWSによるクラウド入門</a>」が一般に向けて公開されている。<br />
+わかりやすい説明と取り組みやすい分量だったので活用させてもらいました。</p>
+
+<h2 id="今回利用するインスタンスタイプとami">今回利用するインスタンスタイプとAMI</h2>
+
+<h3 id="インスタンスタイプについて">インスタンスタイプについて</h3>
+
+<p>ハードウェアアクセラレーターを搭載した「高速コンピューティング」というカテゴリから、「g4」インスタンスを選択した。<br />
+今回はこの中で最小規模となる「g4dn.xlarge」使用する。<br />
+ハッシュ解析というタスクに限定すれば、「g4」の中から個々にのケースにとって最適と思えるものを選ぶと良いと思う。<br />
+<div class="alert info ">
+  <p>必要に応じてvCPUの制限緩和を忘れずに。<br />
+なお、「g4dn.xlarge」は東京リージョンで0.71$/hourの請求が生じる。</p>
+</div></p>
+
+<h3 id="amiについて">AMIについて</h3>
+
+<p>Deep Learning用のイメージはGPUドライバーがプリインストールされており、素早く作業に取りかかれるという判断から、今回は「Deep Learning Base AMI (Ubuntu 18.04)」を使う。
+  　
+
+
+
+<div class="figure center" >
+  
+    <img class="fig-img" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1603856245/MyTechBlog/screenshot_2020-10-28_12.34.27_wbzpdh.jpg"  alt="Deep Leraning Base AMI (Ubuntu 18.04)">
+  
+   
+    <span class="caption">Deep Leraning Base AMI (Ubuntu 18.04)</span>
+  
+</div>
+</p>
+
+<h1 id="インスタンスの作成とhashcatの導入">インスタンスの作成とHashcatの導入</h1>
+
+<h2 id="ディレクトリを作成しpipenvで初期化">ディレクトリを作成しPipenvで初期化</h2>
+<pre><code>mkdir aws-hashcat
+cd aws-hashcat
+pipenv --python 3.8.6</code></pre>
+<h2 id="aws-cdkパッケージをインストール">AWS_CDKパッケージをインストール</h2>
+<pre><code>pipenv install aws_cdk.aws-ec2</code></pre>
+<p>そして仮想環境を立ち上げる。</p>
+<pre><code>pipenv shell</code></pre>
+<p>他にどのようなAPIがあるのか、各APIの導入・用法などは<a href="https://docs.aws.amazon.com/cdk/api/latest/docs/aws-construct-library.html">API Reference</a>で確認する。<br />
+というか、リファレンス見ながらでないと書けない。
+<div class="alert info ">
+  <p><a href="https://docs.aws.amazon.com/ja_jp/cdk/latest/guide/home.html">AWS Cloud Dvelopment Kit</a>のデベロッパーガイド<br />
+現在英語しか表示できない。</p>
+</div></p>
+
+<h2 id="cdkでインスタンスを構築する">CDKでインスタンスを構築する</h2>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+      <span>app.py</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">from aws_cdk import (
+    core,
+    aws_ec2 as ec2,
+)
+import os
+
+
+class AWSHashCat(core.Stack):
+    def __init__(self, scope: core.App, name: str, key_name: str, **kwargs) -&gt; None:
+        super().__init__(scope, name, **kwargs)
+
+        vpc = ec2.Vpc(
+            self,
+            &#34;AWS-Hashcat-Vpc&#34;,
+            max_azs=1,
+            cidr=&#34;10.10.0.0/23&#34;,
+            subnet_configuration=[
+                ec2.SubnetConfiguration(
+                    name=&#34;public&#34;,
+                    subnet_type=ec2.SubnetType.PUBLIC,
+                )
+            ],
+            nat_gateways=0,
+        )
+
+        sg = ec2.SecurityGroup(
+            self,
+            &#34;AWS-Hashcat-sg&#34;,
+            vpc=vpc,
+            allow_all_outbound=True,
+        )
+        sg.add_ingress_rule(
+            peer=ec2.Peer.any_ipv4(),
+            connection=ec2.Port.tcp(22),
+        )
+
+        host = ec2.Instance(
+            self,
+            &#34;AWS-HashcatInstance&#34;,
+            instance_type=ec2.InstanceType(&#34;g4dn.xlarge&#34;),
+            machine_image=ec2.MachineImage.generic_linux(
+                {&#34;ap-northeast-1&#34;: &#34;ami-05290c2598856a2a3&#34;}
+            ),
+            vpc=vpc,
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+            security_group=sg,
+            key_name=key_name,
+        )
+
+        core.CfnOutput(
+            self, &#34;InstancePublicDnsName&#34;, value=host.instance_private_dns_name
+        )
+        core.CfnOutput(self, &#34;InstancePublicIp&#34;, value=host.instance_public_ip)
+
+
+app = core.App()
+AWSHashCat(
+    app,
+    &#34;AWSHashCat&#34;,
+    key_name=app.node.try_get_context(&#34;key_name&#34;),
+    env={
+        &#34;region&#34;: os.environ[&#34;CDK_DEFAULT_REGION&#34;],
+        &#34;account&#34;: os.environ[&#34;CDK_DEFAULT_ACCOUNT&#34;],
+    },
+)
+
+app.synth()</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p>VPCとSecurity Groupを定義して、そこにインスタンスを立ち上げるといった流れ。</p>
+
+<h3 id="vpcの設定">VPCの設定</h3>
+<pre><code>vpc = ec2.Vpc(
+    self,
+    &#34;AWS-Hashcat-Vpc&#34;,
+    max_azs=1,
+    cidr=&#34;10.10.0.0/23&#34;,
+    subnet_configuration=[
+        ec2.SubnetConfiguration(
+            name=&#34;public&#34;,
+            subnet_type=ec2.SubnetType.PUBLIC,
+        )
+    ],
+    nat_gateways=0,
+)</code></pre>
+<ul>
+<li><p><code>max_azs</code> : リージョン内で使用するアベイラビリティゾーン(以後AZ)の数を定義する。<br />
+データセンターの障害が問題となるシステムを構築する際は2以上を指定する。今回は1でOK</p></li>
+
+<li><p><code>cidr</code> : VPC内のIPv4レンジを指定する。今回の場合プレフィックスが<code>/23</code>、つまり510個<br />
+のIPv4アドレスが使える。VPC内に立ち上げるインスタンス数に合わせて設定する。<br />
+VPC内のアドレス数は請求に影響しない。</p></li>
+
+<li><p><code>subnet_congiuration</code> : VPC内にどのようなサブネットを作成するかを指定する。<br />
+VPC内のインスタンスとだけの通信で良い場合は<code>private</code>を、インターネットに<br />
+つなげる必要がある場合は<code>public</code>を指定する。<br />
+今回はインターネット経由でSSHによる通信を行いたいので<code>public</code>で。</p></li>
+
+<li><p><code>natgateways</code> : VPC内に構成した<code>Private subnet</code>を安全にインターネットに接続するため<br />
+のゲートウェイ。<br />
+必要がなければ<code>0</code>にしておく。でないと転送量と起動時間ベースで請求が発生する。</p></li>
+</ul>
+
+<div class="alert info ">
+  <p><p>参考までにnatgatewayの料金</p>
+
+<ul>
+<li>NAT gateway 起動料金 - <code>$0.062/h</code><br /></li>
+<li>NAT data 転送料金 - <code>$0.062/GB</code><br />
+
+<ul>
+<li>IN/OUTどちらも課金対象。</li>
+</ul></li>
+</ul>
+</p>
+</div>
+
+<h3 id="セキュリティグループの設定">セキュリティグループの設定</h3>
+<pre><code>sg = ec2.SecurityGroup(
+    self,
+    &#34;AWS-Hashcat-sg&#34;,
+    vpc=vpc,
+    allow_all_outbound=True,
+)
+sg.add_ingress_rule(
+    peer=ec2.Peer.any_ipv4(),
+    connection=ec2.Port.tcp(22),
+)</code></pre>
+<ul>
+<li><p><code>allow_all_outbound</code> : 外部への通信を許可する。デフォルトで<code>True</code>。<br />
+<code>False</code>にした場合、すべてのアウトバウンドトラフィックが許可されなくなり<br />
+すべてのアウトバウンドトラフィックを明示的に許可する必要がある。</p></li>
+
+<li><p><code>add_ingress_rule</code> : インバウンドトラフィックの許可ルール。<br />
+<code>peer=ec2.Peer.any_ipv4</code>ですべてのIPv4アドレスを対象にする。個別に(cidr表記で)設定<br />
+することも可能である(その場合anyは消す)。<br />
+<code>ec2.Port.tcp()</code>で指定したポートへのTCP接続を許可する。</p></li>
+</ul>
+
+<h3 id="インスタンスの定義部">インスタンスの定義部</h3>
+<pre><code>host = ec2.Instance(
+    self,
+    &#34;AWS-HashcatInstance&#34;,
+    instance_type=ec2.InstanceType(&#34;g4dn.xlarge&#34;),
+    machine_image=ec2.MachineImage.generic_linux(
+        {&#34;ap-northeast-1&#34;: &#34;ami-05290c2598856a2a3&#34;}
+    ),
+    vpc=vpc,
+    vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC),
+    security_group=sg,
+    key_name=key_name,
+)
+core.CfnOutput(
+    self, &#34;InstancePublicDnsName&#34;, value=host.instance_private_dns_name
+)
+core.CfnOutput(self, &#34;InstancePublicIp&#34;, value=host.instance_public_ip)</code></pre>
+<ul>
+<li><code>instance_type</code> : 起動したいインスタンスタイプを指定する。</li>
+<li><code>machinee_image</code> : 起動したいマシーンイメージ(.isoや.ovaなどに相当)を選択する。<br />
+クラス<code>MachineImage</code>直下のメソッドにいくつか選択方法が用意されている。<br />
+詳細は<a href="https://docs.aws.amazon.com/cdk/api/latest/docs/@aws-cdk_aws-ec2.MachineImage.html">class MachineImage</a>を参照。</li>
+</ul>
+
+<h2 id="インスタンス内でhashcatを使うための準備">インスタンス内でHashcatを使うための準備</h2>
+
+<p>作業ディレクトリ内で</p>
+<pre><code>mkdir hashcatTools # 名前は何でも良い
+cd hashcatTools</code></pre>
+<p>として、そこでスクリプトを書いていく。<br />
+まずは、パッケージのインストール。
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight bash language-bash">
+  <figcaption>
+    
+      <span>install.sh</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-bash"><code class="bash">#!/bin/bash
+
+if [ -e /var/lob/dpkg/lock-frontend ]; then
+    echo &#34;dpkg running come back in a few minutes:)&#34;
+    exit 255
+fi
+
+if [ ! -e ~/.updatefin ]; then
+    sudo apt update
+    sudo apt upgrade
+    sudo apt install clinfo unzip p7zip-full python3-pip
+    #sudo apt install build-essential linux-headers-$(uname -r)
+    pip3 install psutil requests beautifulsoup4
+    touch ~/.updatefin
+
+    echo &#34;update completed&#34;
+fi
+rm  ~/.updatefin
+
+
+python3 ./Downloader.py</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure></p>
+
+<p>続いてHashcatと辞書ファイルのダウンロード。<br />
+都度、サイトをチェックして最新版を<code>curl</code>で落としてくるとしても良かったのだが、せっかくのPythonということで面倒事を任せてみた。<br />
+例外処理のハンドラ追加したほうが良さそう？<br />
+追加で学習しなきゃな。
+<div class="alert info ">
+  <p><code>urllib.request</code>の<code>urlretrieve</code>が廃止の可能性アリとのこと。</p>
+</div></p>
+
+
+  
+    
+  
+  
+    
+  
+  
+  
+
+
+<figure class="highlight python language-python">
+  <figcaption>
+    
+      <span>Downloader.py</span>
+    
+  </figcaption>
+  <table>
+    <tbody>
+      <tr>
+        <td class="gutter">
+          <pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre>
+        </td>
+        <td class="code">
+          <pre class="code-highlight language-python"><code class="python">import os
+import urllib.error
+import urllib.request
+import sys
+import time
+from subprocess import CalledProcessError, run
+
+import requests
+from bs4 import BeautifulSoup
+
+
+# def apt_update():
+#     update = [&#34;sudo&#34;, &#34;apt-get&#34;, &#34;-y&#34;, &#34;update&#34;]
+#     upgrade = [&#34;sudo&#34;, &#34;apt-get&#34;, &#34;-y&#34;, &#34;upgrade&#34;]
+#     install1 = [
+#         &#34;sudo&#34;,
+#         &#34;apt-get&#34;,
+#         &#34;-y&#34;,
+#         &#34;install&#34;,
+#         &#34;clinfo&#34;,
+#         &#34;unzip&#34;,
+#         &#34;p7zip-full&#34;,
+#         &#34;python3-pip&#34;,
+#     ]
+#     pip = [&#34;pip3&#34;, &#34;install&#34;, &#34;psutil&#34;, &#34;requests&#34;, &#34;beautifulsoup4&#34;]
+#     command = [update, upgrade, install1, pip]
+#
+#     if os.path.isfile(&#34;/var/lib/dpkg/lock-frontend&#34;):
+#         print(&#34;Now dpkg running. Try it in a few minutes:)&#34;)
+#         sys.exit()
+#     else:
+#         for c in command:
+#             try:
+#                 run(c)
+#             except CalledProcessError as e:
+#                 print(e.output)
+
+
+def downloadHashcat():
+    &#34;&#34;&#34;
+    サイトのレイアウトが変わらない限り最新版をダウンロードする。
+
+    &#34;&#34;&#34;
+    print(&#34;Downloading Hashcat...&#34;)
+    url = &#34;https://hashcat.net/&#34;
+    r = requests.get(url)
+    html_content = r.text
+    parsing_html = BeautifulSoup(html_content, &#34;html.parser&#34;)
+    id_download = parsing_html.find(&#34;div&#34;, {&#34;id&#34;: &#34;download&#34;})
+    link = id_download.findAll(&#34;a&#34;)[0]
+    stuff = link.attrs[&#34;href&#34;]
+    hashcat_latest = url &#43; stuff[1:]
+    save_name = stuff[7:]
+    try:
+        urllib.request.urlretrieve(hashcat_latest, save_name)
+        print(&#34;Download complete.&#34;)
+        time.sleep(2)
+    except urllib.error.URLError as urlError:  # 例外処理これでいいのか？
+        print(urlError)
+    if os.path.isfile(save_name):
+        try:
+            run([&#34;7z&#34;, &#34;x&#34;, save_name])
+            print(&#34;Extracting archive completed:p&#34;)
+            time.sleep(2)
+        except CalledProcessError as e:
+            print(e.output)
+
+
+def downloadWordlist():
+    if os.path.exists(&#34;~/wordLists&#34;):
+        pass
+    else:
+        run([&#34;mkdir&#34;, &#34;wordLists&#34;])
+
+    SecLists = [
+        &#34;git&#34;,
+        &#34;clone&#34;,
+        &#34;https://github.com/danielmiessler/SecLists.git&#34;,
+        &#34;./wordLists/secLists&#34;,
+    ]
+
+    rockyou = [
+        &#34;wget&#34;,
+        &#34;-nH&#34;,
+        &#34;https://downloads.skullsecurity.org/passwords/rockyou.txt.bz2&#34;,
+        &#34;-O&#34;,
+        &#34;./wordLists/rockyou.txt.bz2&#34;,
+    ]
+
+    dictionaries = [SecLists, rockyou]
+
+    for d in dictionaries:
+        try:
+            run(d)
+            print(&#34;Download complete.&#34;)
+            time.sleep(2)
+        except CalledProcessError as e:
+            print(e)
+
+    os.chdir(&#34;./wordLists&#34;)
+    run([&#34;bunzip2&#34;, &#34;./rockyou.txt.bz2&#34;])
+
+
+if __name__ == &#34;__main__&#34;:
+    downloadHashcat()
+    downloadWordlist()</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+<p><code>apt</code>のタスクをpythonスクリプトで処理しようとしたが、素直に動かなかったのでシェルスクリプトに分担した。<br />
+無駄が多い気がするのでいつか改良する。</p>
+
+<h2 id="インスタンスの立ち上げ">インスタンスの立ち上げ</h2>
+
+<h3 id="シークレットキーをセットする">シークレットキーをセットする</h3>
+
+<p><code>aws congigure</code>で指示に従うか、以下のように環境変数でセットする。</p>
+<pre><code>❯ export AWS_ACCESS_KEY_ID=XXXXXXXXXXXXXXXXXXX
+❯ export AWS_SECRET_ACCESS_KEY=YYYYYYYYYYYYYYYYYYY
+❯ export AWS_DEFAULT_REAGION=ap-northeast-1</code></pre>
+<h3 id="sshキーを生成する">SSHキーを生成する</h3>
+
+<p>今回立ち上げるインスタンスはSSHでの通信のみを許可しているのでSSHを使ってログインすることになる。</p>
+<pre><code>❯ export KEY_NAME=&#34;AWS-Hashcat&#34;
+❯ aws ec2 create-key-pair --key-name ${KEY_NAME} --query &#39;KeyMaterial&#39; --output text &gt; ${KEY_NAME}.pem</code></pre>
+<p>AWS-Hashcat.pemというファイルが生成される。<br />
+これをSSHで使うために<code>.ssh</code>フォルダ(通常ホームディレクトリにある)に送る。<br />
+(パーミッションを400にするのを忘れずに。)
+<div class="alert info ">
+  <p><a href="https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/cli-chap-welcome.html">AWS cli ユーザーガイド</a>に詳細あり。</p>
+</div></p>
+
+<h3 id="デプロイ">デプロイ</h3>
+
+<p>デプロイしてみよう。</p>
+<pre><code>❯ cdk deploy -c key_name=&#34;AWS-Hashcat&#34;</code></pre>
+<p>暫く待つ。最後にパブリックIPが表示されるのでコピーしておく。</p>
+
+<p>ツール類を送り込む。</p>
+<pre><code>❯ scp -r -i ~/.ssh/AWS-Hashcat.pem ./hashcatTools ubuntu@&lt;IP address&gt;:~/</code></pre>
+<p>ログインする。</p>
+<pre><code>❯ ssh -i ~/.ssh/AWS-Hashcat.pem ubuntu@&lt;IP address&gt;</code></pre>
+<h3 id="送り込んだツールを実行する">送り込んだツールを実行する</h3>
+
+<p>フォルダごとコピーして送っているので同名のフォルダが有るはず。そこに移動して</p>
+<pre><code>❯ chmod +x ./install.sh &amp;&amp; ./install.sh</code></pre>
+<p>と入力して暫く待つ<code>apt</code>の質問には<code>y</code>と答える。<br />
+(コマンドに<code>-y</code>入れておくの怖い)</p>
+
+<div class="alert info ">
+  <p>実は、起動すると同時に裏でdpkg(いやaptか)作動していて<code>install.sh</code>が動かない。<br />
+待つのが嫌なら(金かかるし)、<code>ps aux | grep -e dpkg -e apt</code>で当該プロセスを見つけて<code>kill</code>する。<br />
+<code>dpkg</code>をインターセプトした場合、<code>sudo dpkg --configure -a</code>実行する必要がある。
+スクリプトが<code>lock-forntend</code>の存在を検出したら<code>/var/lib/dpkg/lock-forntend</code>を削除する。</p>
+</div>
+
+<h1 id="hashcatを動かす">Hashcatを動かす</h1>
+
+<p><code>nvidia-smi</code>でGPUのステータスチェック。</p>
+
+<p>アイドル時</p>
+<pre><code>Mon Nov  9 04:05:39 2020
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 450.80.02    Driver Version: 450.80.02    CUDA Version: 11.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            On   | 00000000:00:1E.0 Off |                    0 |
+| N/A   24C    P8     9W /  70W |      0MiB / 15109MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+</code></pre>
+<p>使用時</p>
+<pre><code>Mon Nov  9 04:07:28 2020
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 450.80.02    Driver Version: 450.80.02    CUDA Version: 11.0     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  Tesla T4            On   | 00000000:00:1E.0 Off |                    0 |
+| N/A   32C    P0    26W /  70W |    104MiB / 15109MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|    0   N/A  N/A      3981      C   ./hashcat-6.1.1/hashcat.bin       101MiB |
++-----------------------------------------------------------------------------+</code></pre>
+<h2 id="ベンチマーク">ベンチマーク</h2>
+<pre><code>hashcat (v6.1.1) starting in benchmark mode...
+
+nvmlDeviceGetFanSpeed(): Not Supported
+
+CUDA API (CUDA 11.0)
+====================
+* Device #1: Tesla T4, 15007/15109 MB, 40MCU
+
+OpenCL API (OpenCL 1.2 CUDA 11.0.228) - Platform #1 [NVIDIA Corporation]
+========================================================================
+* Device #2: Tesla T4, skipped
+
+Benchmark relevant options:
+===========================
+* --optimized-kernel-enable
+* --workload-profile=3
+
+Hashmode: 0 - MD5
+
+Speed.#1.........: 21396.5 MH/s (62.56ms) @ Accel:32 Loops:1024 Thr:1024 Vec:1
+
+Hashmode: 100 - SHA1
+
+Speed.#1.........:  7469.3 MH/s (89.68ms) @ Accel:16 Loops:1024 Thr:1024 Vec:1
+
+Hashmode: 1400 - SHA2-256
+
+Speed.#1.........:  3196.2 MH/s (52.41ms) @ Accel:4 Loops:1024 Thr:1024 Vec:1
+
+Hashmode: 1700 - SHA2-512
+
+Speed.#1.........:  1024.6 MH/s (81.81ms) @ Accel:8 Loops:256 Thr:1024 Vec:1
+
+Hashmode: 22000 - WPA-PBKDF2-PMKID+EAPOL (Iterations: 4095)
+
+Speed.#1.........:   367.0 kH/s (55.65ms) @ Accel:8 Loops:256 Thr:1024 Vec:1
+
+Hashmode: 1000 - NTLM
+
+Speed.#1.........: 39115.6 MH/s (68.53ms) @ Accel:64 Loops:1024 Thr:1024 Vec:1
+
+Hashmode: 3000 - LM
+
+Speed.#1.........: 22026.9 MH/s (60.74ms) @ Accel:512 Loops:1024 Thr:64 Vec:1
+
+Hashmode: 5500 - NetNTLMv1 / NetNTLMv1+ESS
+
+Speed.#1.........: 22281.9 MH/s (60.17ms) @ Accel:32 Loops:1024 Thr:1024 Vec:1
+
+Hashmode: 5600 - NetNTLMv2
+
+Speed.#1.........:  1586.4 MH/s (52.72ms) @ Accel:8 Loops:256 Thr:1024 Vec:1
+
+Hashmode: 1500 - descrypt, DES (Unix), Traditional DES
+
+Speed.#1.........:   891.2 MH/s (93.84ms) @ Accel:32 Loops:1024 Thr:64 Vec:1
+
+Hashmode: 500 - md5crypt, MD5 (Unix), Cisco-IOS $1$ (MD5) (Iterations: 1000)
+
+Speed.#1.........: 10900.7 kH/s (57.18ms) @ Accel:16 Loops:1000 Thr:1024 Vec:1
+
+Hashmode: 3200 - bcrypt $2*$, Blowfish (Unix) (Iterations: 32)
+
+Speed.#1.........:    26726 H/s (23.30ms) @ Accel:4 Loops:8 Thr:16 Vec:1
+
+Hashmode: 1800 - sha512crypt $6$, SHA512 (Unix) (Iterations: 5000)
+
+Speed.#1.........:   126.0 kH/s (64.60ms) @ Accel:8 Loops:128 Thr:1024 Vec:1
+
+Hashmode: 7500 - Kerberos 5, etype 23, AS-REQ Pre-Auth
+
+Speed.#1.........:   314.8 MH/s (66.54ms) @ Accel:64 Loops:128 Thr:64 Vec:1
+
+Hashmode: 13100 - Kerberos 5, etype 23, TGS-REP
+
+Speed.#1.........:   316.3 MH/s (66.23ms) @ Accel:128 Loops:64 Thr:64 Vec:1
+
+Hashmode: 15300 - DPAPI masterkey file v1 (Iterations: 23999)
+
+Speed.#1.........:    62536 H/s (55.81ms) @ Accel:8 Loops:256 Thr:1024 Vec:1
+
+Hashmode: 15900 - DPAPI masterkey file v2 (Iterations: 12899)
+
+Speed.#1.........:    34966 H/s (92.84ms) @ Accel:4 Loops:256 Thr:1024 Vec:1
+
+Hashmode: 7100 - macOS v10.8+ (PBKDF2-SHA512) (Iterations: 1023)
+
+Speed.#1.........:   441.7 kH/s (73.26ms) @ Accel:4 Loops:255 Thr:1024 Vec:1
+
+Hashmode: 11600 - 7-Zip (Iterations: 16384)
+
+Speed.#1.........:   318.3 kH/s (60.85ms) @ Accel:2 Loops:4096 Thr:1024 Vec:1
+
+Hashmode: 12500 - RAR3-hp (Iterations: 262144)
+
+Speed.#1.........:    32546 H/s (78.56ms) @ Accel:1 Loops:16384 Thr:1024 Vec:1
+
+Hashmode: 13000 - RAR5 (Iterations: 32799)
+
+Speed.#1.........:    33523 H/s (76.11ms) @ Accel:16 Loops:128 Thr:1024 Vec:1
+
+Hashmode: 6211 - TrueCrypt RIPEMD160 + XTS 512 bit (Iterations: 1999)
+
+Speed.#1.........:   258.5 kH/s (73.28ms) @ Accel:16 Loops:64 Thr:1024 Vec:1
+
+Hashmode: 13400 - KeePass 1 (AES/Twofish) and KeePass 2 (AES) (Iterations: 24569)
+
+Speed.#1.........:    29405 H/s (232.15ms) @ Accel:4 Loops:1024 Thr:1024 Vec:1
+
+Hashmode: 6800 - LastPass + LastPass sniffed (Iterations: 499)
+
+Speed.#1.........:  2164.1 kH/s (58.43ms) @ Accel:16 Loops:124 Thr:1024 Vec:1
+
+Hashmode: 11300 - Bitcoin/Litecoin wallet.dat (Iterations: 200459)
+
+Speed.#1.........:     4628 H/s (90.39ms) @ Accel:2 Loops:1024 Thr:1024 Vec:1
+
+Started: Mon Nov  9 04:06:45 2020
+Stopped: Mon Nov  9 04:11:20 2020</code></pre>
+<h2 id="md5にアタック">md5にアタック</h2>
+<pre><code>ubuntu@ip-10-10-0-153:~/hashcatTools$ ./hashcat-6.1.1/hashcat.bin -m 0 -a 0 ./crack.txt ./wordLists/rockyou.txt
+hashcat (v6.1.1) starting...
+
+nvmlDeviceGetFanSpeed(): Not Supported
+
+CUDA API (CUDA 11.0)
+====================
+* Device #1: Tesla T4, 15007/15109 MB, 40MCU
+
+OpenCL API (OpenCL 1.2 CUDA 11.0.228) - Platform #1 [NVIDIA Corporation]
+========================================================================
+* Device #2: Tesla T4, skipped
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashfile &#39;./crack.txt&#39; on line 5 (25f9e794323b453885f5181f1b624d0): Token length exception
+Hashfile &#39;./crack.txt&#39; on line 7 (5f4dcc3b5aa765d61d8327deb882cf9): Token length exception
+Hashes: 12 digests; 12 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Applicable optimizers applied:
+* Zero-Byte
+* Early-Skip
+* Not-Salted
+* Not-Iterated
+* Single-Salt
+* Raw-Hash
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Using pure kernels enables cracking longer passwords but for the price of drastically reduced performance.
+If you want to switch to optimized backend kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Temperature abort trigger set to 90c
+
+Host memory required for this attack: 766 MB
+
+Dictionary cache built:
+* Filename..: ./wordLists/rockyou.txt
+* Passwords.: 14344391
+* Bytes.....: 139921497
+* Keyspace..: 14344384
+* Runtime...: 1 sec
+
+3f230640b78d7e71ac5514e57935eb69:qazxsw
+6c569aabbf7775ef8fc570e228c16b98:password!
+e10adc3949ba59abbe56e057f20f883e:123456
+fcea920f7412b5da7be0cf42b8c93759:1234567
+25d55ad283aa400af464c76d713c07ad:12345678
+e99a18c428cb38d5f260853678922e03:abc123
+d8578edf8458ce06fbc5bb76a58c5ca4:qwerty
+96e79218965eb72c92a549dd5a330112:111111
+7c6a180b36896a0a8c02787eeafb0e4c:password1
+f6a0cb102c62879d397b12b62c092c06:bluered
+Approaching final keyspace - workload adjusted.
+
+
+Session..........: hashcat
+Status...........: Exhausted
+Hash.Name........: MD5
+Hash.Target......: ./crack.txt
+Time.Started.....: Mon Nov  9 12:17:43 2020 (2 secs)
+Time.Estimated...: Mon Nov  9 12:17:45 2020 (0 secs)
+Guess.Base.......: File (./wordLists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:  7788.0 kH/s (5.57ms) @ Accel:1024 Loops:1 Thr:64 Vec:1
+Recovered........: 10/12 (83.33%) Digests
+Progress.........: 14344384/14344384 (100.00%)
+Rejected.........: 0/14344384 (0.00%)
+Restore.Point....: 14344384/14344384 (100.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidates.#1....: $HEX[31393132383873616c] -&gt; $HEX[042a0337c2a156616d6f732103]
+Hardware.Mon.#1..: Temp: 33c Util: 36% Core:1590MHz Mem:5000MHz Bus:8
+
+Started: Mon Nov  9 12:17:38 2020
+Stopped: Mon Nov  9 12:17:47 2020</code></pre>
+<h2 id="sha256">sha256</h2>
+<pre><code>ubuntu@ip-10-10-0-153:~/hashcatTools$ ./hashcat-6.1.1/hashcat.bin -m 1400 -a 0 ./crack_sha256.txt ./wordLists/rockyou.txt
+hashcat (v6.1.1) starting...
+
+nvmlDeviceGetFanSpeed(): Not Supported
+
+CUDA API (CUDA 11.0)
+====================
+* Device #1: Tesla T4, 15007/15109 MB, 40MCU
+
+OpenCL API (OpenCL 1.2 CUDA 11.0.228) - Platform #1 [NVIDIA Corporation]
+========================================================================
+* Device #2: Tesla T4, skipped
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashes: 10 digests; 10 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Applicable optimizers applied:
+* Zero-Byte
+* Early-Skip
+* Not-Salted
+* Not-Iterated
+* Single-Salt
+* Raw-Hash
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Using pure kernels enables cracking longer passwords but for the price of drastically reduced performance.
+If you want to switch to optimized backend kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Temperature abort trigger set to 90c
+
+Host memory required for this attack: 766 MB
+
+Dictionary cache hit:
+* Filename..: ./wordLists/rockyou.txt
+* Passwords.: 14344384
+* Bytes.....: 139921497
+* Keyspace..: 14344384
+
+9d777935627a29c77604c57273520eb42635fd1847d2eeea1e7441fbaeb26253:qazxsw
+f82a7d02e8f0a728b7c3e958c278745cb224d3d7b2e3b84c0ecafc5511fdbdb7:password!
+8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92:123456
+8bb0cf6eb9b17d0f7d22b456f121257dc1254e1f01665370476383ea776df414:1234567
+ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f:12345678
+6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090:abc123
+65e84be33532fb784c48129675f9eff3a682b27168c0ea744b2cf58ee02337c5:qwerty
+bcb15f821479b4d5772bd0ca866c00ad5f926e3580720659cc80d39c9d09802a:111111
+c82a3f40574419230d49389710066b84864bcf1fdbe526f0ff7810b078cc45ad:bluered
+Approaching final keyspace - workload adjusted.
+
+
+Session..........: hashcat
+Status...........: Exhausted
+Hash.Name........: SHA2-256
+Hash.Target......: ./crack_sha256.txt
+Time.Started.....: Mon Nov  9 12:28:41 2020 (2 secs)
+Time.Estimated...: Mon Nov  9 12:28:43 2020 (0 secs)
+Guess.Base.......: File (./wordLists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:  7840.7 kH/s (5.43ms) @ Accel:1024 Loops:1 Thr:64 Vec:1
+Recovered........: 9/10 (90.00%) Digests
+Progress.........: 14344384/14344384 (100.00%)
+Rejected.........: 0/14344384 (0.00%)
+Restore.Point....: 14344384/14344384 (100.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidates.#1....: $HEX[31393132383873616c] -&gt; $HEX[042a0337c2a156616d6f732103]
+Hardware.Mon.#1..: Temp: 33c Util: 27% Core:1590MHz Mem:5000MHz Bus:8
+
+Started: Mon Nov  9 12:28:36 2020
+Stopped: Mon Nov  9 12:28:44 2020</code></pre>
+<p>Hashcat問題なく作動してますな。
+<div class="alert info ">
+  <p>ベンチマークと二種類のハッシュ解析を実行した後、2時間放置して発生した請求は約2ドルでした。</p>
+</div></p>
+
+<p>AWSを活用したハッシュ解析の工程、以上で終わり。</p>
+
+<h1 id="まとめ">まとめ</h1>
+
+<ul>
+<li>AWS_CDKを用いてVPC、SG、インスタンスタイプを定義し、クラウド上にリソースを作成しました。<br /></li>
+<li>スクリプトを作成して、ハッシュ解析に必要なアプリケーションや辞書ファイルを用意しました。<br /></li>
+</ul>
+
+<p>今回はベンチマークと辞書ファイル内の文字列をハッシュ化したものを解析したのみなので、スムースに解析できましたが<br />
+実際の解析には工夫が必要となるようです。</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/hashcat/">HashCat</a>
+
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/aws/">AWS</a>
+
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/tools/">tools</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/11/tryhackme-reversingelf/" data-tooltip="TryHackMe: ReversingELF">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた(Level.3編)">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/10/aws%E3%81%AE%E5%8A%9B%E3%82%92%E5%80%9F%E3%82%8A%E3%81%A6%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E8%A7%A3%E8%AA%AD%E3%82%92%E8%A9%A6%E3%81%BF%E3%82%8B/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 しろくま. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/11/tryhackme-reversingelf/" data-tooltip="TryHackMe: ReversingELF">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/08/cpawctf%E3%81%AB%E3%83%81%E3%83%A3%E3%83%AC%E3%83%B3%E3%82%B8%E3%81%97%E3%81%A6%E3%81%BF%E3%81%9Flevel.3%E7%B7%A8/" data-tooltip="CpawCTFにチャレンジしてみた(Level.3編)">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/10/aws%E3%81%AE%E5%8A%9B%E3%82%92%E5%80%9F%E3%82%8A%E3%81%A6%E3%83%8F%E3%83%83%E3%82%B7%E3%83%A5%E3%81%AE%E8%A7%A3%E8%AA%AD%E3%82%92%E8%A9%A6%E3%81%BF%E3%82%8B/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fdivergen371.github.io%2F2020%2F10%2Faws%25E3%2581%25AE%25E5%258A%259B%25E3%2582%2592%25E5%2580%259F%25E3%2582%258A%25E3%2581%25A6%25E3%2583%258F%25E3%2583%2583%25E3%2582%25B7%25E3%2583%25A5%25E3%2581%25AE%25E8%25A7%25A3%25E8%25AA%25AD%25E3%2582%2592%25E8%25A9%25A6%25E3%2581%25BF%25E3%2582%258B%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">しろくま</h4>
+    
+      <div id="about-card-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</div>
+    
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Japan
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594722855/MyTechBlog/jr-korpa-mDvtYjZR8QI-unsplash_pjjiv2.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://divergen371.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

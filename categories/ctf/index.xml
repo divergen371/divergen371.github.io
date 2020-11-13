@@ -6,10 +6,15 @@
     <description>Recent content in CTF on しろくまの雑記帳</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Mon, 03 Aug 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="https://divergen371.github.io/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
-    
+    <lastBuildDate>Sun, 08 Nov 2020 17:26:03 +0900</lastBuildDate><atom:link href="https://divergen371.github.io/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>TryHackMe: ReversingELF</title>
+      <link>https://divergen371.github.io/2020/11/tryhackme-reversingelf/</link>
+      <pubDate>Sun, 08 Nov 2020 17:26:03 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/2020/11/tryhackme-reversingelf/</guid>
+      <description>&lt;p&gt;最近ごぶさただったので復習として…。&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>CpawCTFにチャレンジしてみた(Level.3編)</title>
