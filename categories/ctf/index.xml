@@ -6,7 +6,16 @@
     <description>Recent content in CTF on しろくまの雑記帳</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sun, 08 Nov 2020 17:26:03 +0900</lastBuildDate><atom:link href="https://divergen371.github.io/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 14 Nov 2020 15:14:29 +0900</lastBuildDate><atom:link href="https://divergen371.github.io/categories/ctf/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HackTheBox: Impossible_Password</title>
+      <link>https://divergen371.github.io/2020/11/hackthebox-impossible_password/</link>
+      <pubDate>Sat, 14 Nov 2020 15:14:29 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/2020/11/hackthebox-impossible_password/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>TryHackMe: ReversingELF</title>
       <link>https://divergen371.github.io/2020/11/tryhackme-reversingelf/</link>
