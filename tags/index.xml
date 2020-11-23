@@ -6,7 +6,25 @@
     <description>Recent content in Tags on しろくまの雑記帳</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>ja</language>
-    <lastBuildDate>Sat, 14 Nov 2020 15:14:29 +0900</lastBuildDate><atom:link href="https://divergen371.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 22 Nov 2020 23:15:52 +0900</lastBuildDate><atom:link href="https://divergen371.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Joomla</title>
+      <link>https://divergen371.github.io/tags/joomla/</link>
+      <pubDate>Sun, 22 Nov 2020 23:15:52 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/tags/joomla/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>SQLi</title>
+      <link>https://divergen371.github.io/tags/sqli/</link>
+      <pubDate>Sun, 22 Nov 2020 23:15:52 +0900</pubDate>
+      
+      <guid>https://divergen371.github.io/tags/sqli/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>reversing</title>
       <link>https://divergen371.github.io/tags/reversing/</link>

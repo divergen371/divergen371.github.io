@@ -4,12 +4,47 @@
   
   <url>
     <loc>https://divergen371.github.io/categories/</loc>
-    <lastmod>2020-11-14T15:14:29+09:00</lastmod>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
   </url>
   
   <url>
     <loc>https://divergen371.github.io/categories/ctf/</loc>
-    <lastmod>2020-11-14T15:14:29+09:00</lastmod>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://divergen371.github.io/tags/joomla/</loc>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://divergen371.github.io/post/</loc>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://divergen371.github.io/tags/sqli/</loc>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://divergen371.github.io/tags/</loc>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://divergen371.github.io/categories/tryhackme/</loc>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://divergen371.github.io/2020/11/tryhackme-daily-bugle/</loc>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://divergen371.github.io/</loc>
+    <lastmod>2020-11-22T23:15:52+09:00</lastmod>
   </url>
   
   <url>
@@ -23,22 +58,7 @@
   </url>
   
   <url>
-    <loc>https://divergen371.github.io/post/</loc>
-    <lastmod>2020-11-14T15:14:29+09:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://divergen371.github.io/tags/reversing/</loc>
-    <lastmod>2020-11-14T15:14:29+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://divergen371.github.io/tags/</loc>
-    <lastmod>2020-11-14T15:14:29+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://divergen371.github.io/</loc>
     <lastmod>2020-11-14T15:14:29+09:00</lastmod>
   </url>
   
@@ -49,11 +69,6 @@
   
   <url>
     <loc>https://divergen371.github.io/tags/tryhackme/</loc>
-    <lastmod>2020-11-08T17:26:03+09:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://divergen371.github.io/categories/tryhackme/</loc>
     <lastmod>2020-11-08T17:26:03+09:00</lastmod>
   </url>
   
