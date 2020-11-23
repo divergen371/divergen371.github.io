@@ -615,7 +615,7 @@ find: &#39;/home/jjameson&#39;: Permission denied</code></pre>
 
 <p>jjamesonでSSHログイン
 とりあえず、SUIDを調べる。</p>
-<pre><code>sh-4.2$ find / -user root -perm -4000 -print 2&gt; /dev/null
+<pre><code>[jjameson@dailybugle ~]$ find / -user root -perm -4000 -print 2&gt; /dev/null
 find / -user root -perm -4000 -print 2&gt; /dev/null
 /usr/bin/chage
 /usr/bin/gpasswd
