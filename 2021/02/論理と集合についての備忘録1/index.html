@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.81.0 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="しろくま">
+<meta name="keywords" content="tech">
+<meta name="description" content="2021年3月7日更新">
+
+
+<meta property="og:description" content="2021年3月7日更新">
+<meta property="og:type" content="article">
+<meta property="og:title" content="論理と集合についての備忘録1">
+<meta name="twitter:title" content="論理と集合についての備忘録1">
+<meta property="og:url" content="https://divergen371.github.io/2021/02/%E8%AB%96%E7%90%86%E3%81%A8%E9%9B%86%E5%90%88%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E5%82%99%E5%BF%98%E9%8C%B21/">
+<meta property="twitter:url" content="https://divergen371.github.io/2021/02/%E8%AB%96%E7%90%86%E3%81%A8%E9%9B%86%E5%90%88%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E5%82%99%E5%BF%98%E9%8C%B21/">
+<meta property="og:site_name" content="しろくまの雑記帳">
+<meta property="og:description" content="2021年3月7日更新">
+<meta name="twitter:description" content="2021年3月7日更新">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2021-02-28T19:14:08">
+  
+  
+    <meta property="article:modified_time" content="2021-02-28T19:14:08">
+  
+  
+  
+    
+      <meta property="article:section" content="Mathematics">
+    
+      <meta property="article:section" content="Discrete Math">
+    
+  
+  
+    
+      <meta property="article:tag" content="Set">
+    
+      <meta property="article:tag" content="Logic">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+  <meta name="twitter:site" content="@aswzjd">
+
+
+  <meta name="twitter:creator" content="@aswzjd">
+
+
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1614516044/MyTechBlog/luis-gonzalez-eBaFpf47__0-unsplash_kcs71f.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/c_thumb,w_200,g_face/v1614516044/MyTechBlog/luis-gonzalez-eBaFpf47__0-unsplash_kcs71f.jpg">
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1614516044/MyTechBlog/luis-gonzalez-eBaFpf47__0-unsplash_kcs71f.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/v1614516044/MyTechBlog/luis-gonzalez-eBaFpf47__0-unsplash_kcs71f.jpg">
+
+
+
+
+  <meta property="og:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+  <meta property="twitter:image" content="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg">
+
+
+    <title>論理と集合についての備忘録1</title>
+
+    <link rel="icon" href="https://divergen371.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://divergen371.github.io/2021/02/%E8%AB%96%E7%90%86%E3%81%A8%E9%9B%86%E5%90%88%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E5%82%99%E5%BF%98%E9%8C%B21/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://divergen371.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+    
+    
+   <script type="text/javascript" id="MathJax-script" async
+src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+   MathJax.Hub.Config({
+     showProcessingMessages: false,
+     messageStyle: "none",
+     tex2jax: {
+       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+       processEscapes: true
+     },
+     TeX: {
+       MultLineWidth: "100%",
+       equationNumbers: { autoNumber: "AMS" }
+     },
+     "HTML-CSS": { fonts: ["Latin-Modern"] }
+   });
+  MathJax.Hub.Queue(function() {
+    
+    
+    
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+
+  MathJax.Hub.Config({
+  
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+  });
+</script>
+
+<script type="text/x-matjax-config">
+  MathJax.Hub.Register.StartupHook("TeX Jax Ready",function () {
+    var TEX = MathJax.InputJax.TeX;
+    var PREFILTER = TEX.prefilterMath;
+    TEX.Augment({
+      prefilterMath: function (math,displaymode,script) {
+        if (!displaymode) {math = "\\small{"+math+"}"}
+        return PREFILTER.call(TEX,math,displaymode,script);
+      }
+    });
+  });
+</script>h
+
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://divergen371.github.io/">しろくまの雑記帳</a>
+  </div>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://divergen371.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">しろくま</h4>
+        
+          <h5 class="sidebar-profile-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://divergen371.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-question"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/divergen371" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://twitter.com/aswzjd" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-twitter"></i>
+      
+      <span class="sidebar-button-desc">twitter</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-left
+              "
+       style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1614516044/MyTechBlog/luis-gonzalez-eBaFpf47__0-unsplash_kcs71f.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-left">
+  
+    <h1 class="post-title" itemprop="headline">
+      論理と集合についての備忘録1
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2021-02-28T19:14:08&#43;09:00">
+        
+  February 28, 2021
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/mathematics">Mathematics</a>, 
+    
+      <a class="category-link" href="https://divergen371.github.io/categories/discrete-math">Discrete Math</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               ">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <p>2021年3月7日更新</p>
+
+<h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#命題の計算">命題の計算</a>
+<ul>
+<li><a href="#命題とは">命題とは</a></li>
+<li><a href="#命題の真理値">命題の真理値</a></li>
+<li><a href="#論理演算子と真理値表">論理演算子と真理値表</a>
+<ul>
+<li><a href="#論理積-and-連言-かつ">論理積・AND、＆、∧、連言、かつ</a></li>
+<li><a href="#論理和-or-選言-または">論理和・OR、｜、∨、選言、または</a></li>
+<li><a href="#否定-not-ではない-lnot">否定・NOT、ではない、\(\lnot\)</a></li>
+<li><a href="#真理値-真理値表のメリット">真理値・真理値表のメリット</a></li>
+<li><a href="#恒真命題と矛盾命題">恒真命題と矛盾命題</a></li>
+</ul></li>
+<li><a href="#命題代数">命題代数</a>
+<ul>
+<li><a href="#論理同値">論理同値</a></li>
+<li><a href="#命題代数の法則">命題代数の法則</a></li>
+</ul></li>
+<li><a href="#含意と同値">含意と同値</a>
+<ul>
+<li><a href="#含意">含意</a></li>
+<li><a href="#逆">逆</a></li>
+<li><a href="#裏">裏</a></li>
+<li><a href="#対偶">対偶</a></li>
+<li><a href="#同値">同値</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#集合">集合</a>
+<ul>
+<li><a href="#集合とは">集合とは</a></li>
+<li><a href="#部分集合">部分集合</a></li>
+<li><a href="#外延的記法と内包的記法">外延的記法と内包的記法</a></li>
+<li><a href="#有限集合と無限集合">有限集合と無限集合</a></li>
+<li><a href="#集合の基本的演算">集合の基本的演算</a></li>
+</ul></li>
+</ul>
+</nav>
+
+<h1 id="命題の計算">命題の計算</h1>
+
+<h2 id="命題とは">命題とは</h2>
+
+<p>命題とは真か偽かを判断できる文のこと。</p>
+
+<h2 id="命題の真理値">命題の真理値</h2>
+
+<p>ある命題\(p\)が真か偽かという情報を命題\(p\)の真理値という。真を記号\(T\)、偽を記号\(F\)で表す。<br />
+命題を真理値で考えることで「意味」をはなれて機械的に操作することができる。</p>
+
+<h2 id="論理演算子と真理値表">論理演算子と真理値表</h2>
+
+<h3 id="論理積-and-連言-かつ">論理積・AND、＆、∧、連言、かつ</h3>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(p \land q\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="論理和-or-選言-または">論理和・OR、｜、∨、選言、または</h3>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(p \lor q\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="否定-not-ではない-lnot">否定・NOT、ではない、\(\lnot\)</h3>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(\lnot p\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="真理値-真理値表のメリット">真理値・真理値表のメリット</h3>
+
+<p>「かつ」、「または」、「ではない」はことばの意味を考えれば直感的に理解できることから、わざわざ真理値表を考える必要性がないように感じる。<br />
+しかし、真理値表を使うことによって命題の「意味」を解釈することなく、命題のの真理値を機械的に操作、計算ができる。</p>
+
+<ul>
+<li>命題\(\lnot(p \land \lnot q )\)について、真理値表を作ってみる</li>
+</ul>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\( \lnot q \)</th>
+<th align="center">\(p \land \lnot q \)</th>
+<th align="center">\(\lnot (p \land \lnot q) \)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<ol>
+<li>\(p\),\(q\)の取りうる真理値の組み合わせをすべて書き出す。</li>
+<li>\(q\)列の真理値を\(\lnot\)の真理値表にあてはめて\(\lnot q\)の真理値を求める。</li>
+<li>\(p\)及び\(\lnot q\)の列の真理値を\(\land\)にあてはめて\(p \land \lnot q \)の真理値を求める。</li>
+<li>\(p \land \lnot q \)の列の真理値を\(\lnot\)の真理値表にあてはめて\(\lnot (p \land \lnot q) \)の真理値を求める。</li>
+</ol>
+
+<h3 id="恒真命題と矛盾命題">恒真命題と矛盾命題</h3>
+
+<p>命題変数の真理値が何であっても常に真をとなる命題を恒真命題という。(恒真命題＝トートロジー。)
+命題変数の真理値が何であっても常に偽となる命題を矛盾命題という。</p>
+
+<h2 id="命題代数">命題代数</h2>
+
+<h3 id="論理同値">論理同値</h3>
+
+<p>命題\(\lnot p \land q\)および\(\lnot (p \lor \lnot q ) \)について。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(\lnot p\)</th>
+<th align="center">\(\lnot p \land q\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\( \lnot q \)</th>
+<th align="center">\(p \lor \lnot q \)</th>
+<th align="center">\(\lnot (p \lor \lnot q) \)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>\(p\)と\(q\)の真理値が同じであれば\(\lnot p \land q\)と\(\lnot (p \lor \lnot q ) \)は真理値が同じになる。<br />
+このようなとき、\(\lnot p \land q\)と\(\lnot (p \lor \lnot q ) \)は論理同値といい、\(\lnot p \land q　\equiv \lnot (p \lor \lnot q ) \)と書き表す。</p>
+
+<h3 id="命題代数の法則">命題代数の法則</h3>
+
+<p>論理同値を確かめるためにいちいち真理値表を作るのは煩雑すぎる。そこで論理同値な命題のうち<br />
+単純なものやわかりやすいものを主要なパターンを法則としてまとめておく。</p>
+
+<p>\(f\)は矛盾命題、\(t\)は恒真命題</p>
+
+<ul>
+<li><p>べき等律</p>
+
+<ul>
+<li>\(p \lor p \equiv p\)</li>
+<li>\(p \land p \equiv p\)</li>
+</ul></li>
+
+<li><p>結合律</p>
+
+<ul>
+<li>\((p \lor q ) \lor r \equiv p \lor (q \lor r)\)</li>
+<li>\((p \land q ) \land r \equiv p \land (q \land r)\)</li>
+</ul></li>
+
+<li><p>交換律</p>
+
+<ul>
+<li>\(p \lor q \equiv q \lor p\)</li>
+<li>\(p \land q \equiv q \land p\)</li>
+</ul></li>
+
+<li><p>分配律</p>
+
+<ul>
+<li>\(p \lor (q \land r) \equiv (p \lor q) \land (p \lor r)\)</li>
+<li>\(p \land (q \lor r) \equiv (p \land q) \lor (p \land r)\)</li>
+</ul></li>
+
+<li><p>同一律</p>
+
+<ul>
+<li>\( p \lor f \equiv p \)</li>
+<li>\( p \land t \equiv p \)</li>
+<li>\( p \lor t \equiv t \)</li>
+<li>\( p \land f \equiv f \)</li>
+</ul></li>
+
+<li><p>補元律</p>
+
+<ul>
+<li>\(p \lor \lnot p \equiv p\)</li>
+<li>\(p \land \lnot p \equiv f\)</li>
+<li>\(\lnot t \equiv f\)</li>
+<li>\(\lnot f \equiv t\)</li>
+</ul></li>
+
+<li><p>対合律</p>
+
+<ul>
+<li>\(\lnot \lnot p \equiv p\)</li>
+</ul></li>
+
+<li><p>ド・モルガンの法則</p>
+
+<ul>
+<li>\( \lnot (p \lor p) \equiv \lnot p \land \lnot q\)</li>
+<li>\( \lnot (p \land p) \equiv \lnot p \lor \lnot q\)</li>
+</ul></li>
+</ul>
+
+<p>法則ごとに双対性が成り立つ。</p>
+
+<h2 id="含意と同値">含意と同値</h2>
+
+<h3 id="含意">含意</h3>
+
+<p>「\(p\)ならば\(q\)である」、この形の文を一般に条件文という。<br />
+条件文「\(p\)ならば\(q\)である」について、命題\(p\)をこの条件文の仮定、命題\(q\)を条件文の結論<br />
+という。<br />
+この「\(p\)ならば\(q\)」を論理演算子\(\to\)用いて\(p \to q\)と表す。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(p \to q\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>直感的には仮定が成り立たないなら偽となるように思えるが、数学の考え方では仮定が成り立たない場合、真とする。</p>
+
+<p>\(p \to q\)は\(\lnot p \lor q\)と論理同値である。</p>
+
+<h3 id="逆">逆</h3>
+
+<p>条件文「\(p\)ならば\(q\)」の仮定と結論を入れ替えて「\(q\)ならば\(p\)」とすると「pならばq」の逆という。<br />
+\(q \to p\)と書き表す。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(q \to p\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="裏">裏</h3>
+
+<p>「\(p\)ならば\(q\)」の仮定と結論を否定した「pでないならばqでない」を「\(p\)ならば\(q\)」の裏という。<br />
+\(\lnot p \to \lnot q\)と書き表す。</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(\lnot p \to \lnot q\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<p>逆と裏は論理同値。</p>
+
+<h3 id="対偶">対偶</h3>
+
+<p>「\(p\)ならば\(q\)」の仮定と結論を入れ替えて否定した条件文「\(q\)でないならば\(p\)でない」を「\(p\)ならば\(q\)」の対偶という。<br />
+\(\lnot q \to \lnot p\)<br />
+\(p \to q\)と\(\lnot q \to \lnot p \)は論理同値。</p>
+
+<p>\(p \to q \equiv \lnot p \lor q\)から対合律と交換律をもちいて<br />
+\(\lnot q \to \lnot p \equiv \lnot \lnot q \lor \lnot p \equiv q \lor \lnot p \equiv \lnot p \lor q \equiv p \to q \)</p>
+
+<h3 id="同値">同値</h3>
+
+<p>「pとqは同値である」=「pが真のときqの真であり、かつ、pが偽のときqも偽である」<br />
+これを論理演算子\( \leftrightarrow\)をもちいて\(p \leftrightarrow q \)と表す。<br />
+\(p \leftrightarrow q \equiv (p \land q) \lor (\lnot p \land \lnot q ) \equiv (p \to q) \land (q \to p) \)</p>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(p \leftrightarrow p \)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(\lnot p\)</th>
+<th align="center">\(\lnot q\)</th>
+<th align="center">\(p \land q\)</th>
+<th align="center">\(\lnot p \land \lnot q\)</th>
+<th align="center">\((p \land q) \lor  (\lnot p \land \lnot q)\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<tr>
+<th align="center">\(p\)</th>
+<th align="center">\(q\)</th>
+<th align="center">\(p \to q\)</th>
+<th align="center">\(q \to p\)</th>
+<th align="center">\((p \to q) \land (q \to p)\)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+
+<tr>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+</tr>
+
+<tr>
+<td align="center">\(F\)</td>
+<td align="center">\(F\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+<td align="center">\(T\)</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="集合">集合</h1>
+
+<h2 id="集合とは">集合とは</h2>
+
+<p>議論の対象を集めたものを集合という。<br />
+集合を構成している個々のものを、要素または元という。<br />
+Aを集合とし、aをAを構成するの要素ひとつとしたとき、「aをAの要素である」または、「aはAに属する」という。<br />
+aはAの要素であることを\(a \in A\)と表す。aはAの要素でないことは\(a \notin A\)と表す。
+集合は要素を重複して持たない。
+要素を全く持たない集合を考える必要が生じることもある。要素を持たない集合を空集合と呼び<br />
+\(\varnothing\)で表す。</p>
+
+<p>2つの集合が持っている要素が同じであれば、2つ集合は等しいとする。</p>
+
+<h2 id="部分集合">部分集合</h2>
+
+<p>集合A,Bについて、Aのすべての要素がBの要素でもあるときAはBの部分集合という。これを\( A \subset B\)と書き表す。
+「Aの要素であってBの要素でない」ものがあることは\(A \not \subset B\)と書き表す。</p>
+
+<h2 id="外延的記法と内包的記法">外延的記法と内包的記法</h2>
+
+<p>\(\mathbb{ N }\)を普遍集合として、5より小さい要素をもつ集合について。<br />
+外延的記法=\( \{1,2,3,4\} \)<br />
+内包的記法=\( \{x \mid x \lt 5 \} \)</p>
+
+<p>要素をすべて書き出すのが外延的記法。要素が満たすべき条件によって書き表すのが内包的記法。
+\(\{\}\)で空集合を表すこともある。</p>
+
+<p>普遍集合を明示する場合もある。  例えば\(U\)を普遍集合として。<br />
+\(\{x \in U \mid P(x)\}\)</p>
+
+<h2 id="有限集合と無限集合">有限集合と無限集合</h2>
+
+<p>\(\mathbb{N}\)を普遍集合とする。<br />
+集合\(A\ = \{x \mid x \lt 5\}\)のように持っている要素を「\(n\)個」で表せる集合を有限集合という。<br />
+集合\(B\ = \{x \mid x \gt 5\}\)のように要素の個数を言い表せないものを無限集合という。<br />
+普遍集合が有限集合であれば、その普遍集合で作るあらゆる集合は有限集合となる。<br />
+つまり、有限集合の部分集合は有限集合である。</p>
+
+<h2 id="集合の基本的演算">集合の基本的演算</h2>
+
+<p>手短に…</p>
+
+<p>普遍集合\(U\)と、\(U\)に属する集合\(A, B\)について。<br />
+どちらにも属している要素を集めて出来る集合を\(A,B\)の共通部分といい、\(A \cap B\)と表す。<br />
+\(A, B\)どちらか一方に属している要素を集めて出来る集合を和集合といい、\(A \cup B\)と表す。<br />
+集合\(A\)に属さない\(U\)の要素を集めて作ることが出来る集合を\(A\)の補集合といい、\(A^c\)と表す。<br />
+\(A\)に属し\(B\)に属さない要素を集めて出来る集合を\(A\)と\(B\)の差集合といい、\(A - B\)または\(A \setminus B\)と表す。<br />
+\(A\)と\(B\)のどちらか一方だけに属する要素を集めてできる集合を\(A\)と\(B\)の対称差といい、\(A \triangle B\)と表す。<br />
+内包的記法で以下のように定義出来る。<br />
+\(A \cap B = \{x \mid x \in A \land x \in B\},\)<br />
+\(A \cup B = \{x \mid x \in A \lor x \in B\},\)<br />
+\(A^c  = \{x \mid x \not \in A \},\)<br />
+\(A \setminus B = A \cap B^c = \{ x \mid x \in A \land x \not \in B\},\)<br />
+\(A \triangle B = (A \setminus B) \cup (B \setminus A) = (A \cap B^c) \cup (A^c \cap B) = (A \cup B) \setminus (A \cap B) \ = \{x \mid (x \in A \land x \not \in B) \lor (x \not \in A \land x \in B)\}\)</p>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/set/">Set</a>
+
+  <a class="tag tag--primary tag--small" href="https://divergen371.github.io/tags/logic/">Logic</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/11/tryhackme-daily-bugle/" data-tooltip="TryHackMe: Daily Bugle">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2021/02/%E8%AB%96%E7%90%86%E3%81%A8%E9%9B%86%E5%90%88%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E5%82%99%E5%BF%98%E9%8C%B21/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2021 しろくま. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">NEXT</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://divergen371.github.io/2020/11/tryhackme-daily-bugle/" data-tooltip="TryHackMe: Daily Bugle">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">PREVIOUS</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://divergen371.github.io/2021/02/%E8%AB%96%E7%90%86%E3%81%A8%E9%9B%86%E5%90%88%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E5%82%99%E5%BF%98%E9%8C%B21/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+      
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fdivergen371.github.io%2F2021%2F02%2F%25E8%25AB%2596%25E7%2590%2586%25E3%2581%25A8%25E9%259B%2586%25E5%2590%2588%25E3%2581%25AB%25E3%2581%25A4%25E3%2581%2584%25E3%2581%25A6%25E3%2581%25AE%25E5%2582%2599%25E5%25BF%2598%25E9%258C%25B21%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://res.cloudinary.com/dtzr5zvpc/image/upload/w_1000,c_fill,ar_1:1,g_auto,r_max,b_rgb:262c35/v1594735710/MyTechBlog/hans-jurgen-mager-AZ31hv9kdzE-unsplash_k0hkjm.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">しろくま</h4>
+    
+      <div id="about-card-bio">エンジニアワナビのフリーター。  セキュリティ・インフラ・Web制作・CTFに興味を持っています。</div>
+    
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Japan
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    <div id="cover" style="background-image:url('https://res.cloudinary.com/dtzr5zvpc/image/upload/v1594722855/MyTechBlog/jr-korpa-mDvtYjZR8QI-unsplash_pjjiv2.jpg');"></div>
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://divergen371.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
